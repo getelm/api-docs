@@ -1,6 +1,24 @@
 # Elm API OpenAPI Definition
 
-## Working on your OpenAPI Definition
+## Using the Elm API
+
+### Documentation
+
+To view the formatted API documentation please visit: [getelm.github.io/api-docs/](https://getelm.github.io/api-docs/)
+
+### Reporting bugs
+
+If you are a developer and are experiencing bugs or issues while using the API, please search the [open issues](https://github.com/getelm/getelm-server/issues) to see if there is already an issue open, otherwise [open a new issue](https://github.com/getelm/getelm-server/issues/new).
+
+Please be sure to include as many details as possible for us to recreate and troubleshoot the bug as well as tagging the issue with the `bug` label.
+
+If describing your particular problem requires sharing sensitive information, please instead send us an email at hello@getelm.co.
+
+### Feature requests
+
+Feedback and requests are always welcome. Feel free to [open a new issue](https://github.com/getelm/getelm-server/issues/new) and tag it with the `enhancement` label, or send us an email at hello@getelm.co.
+
+## Working on the Elm OpenAPI Definition
 
 ### Install
 
