@@ -20,6 +20,8 @@ Feedback and requests are always welcome. Feel free to [open a new issue](https:
 
 ## Working on the Elm OpenAPI Definition
 
+This repo uses
+
 ### Install
 
 1. Install [Node JS](https://nodejs.org/).
@@ -36,7 +38,15 @@ Bundles the definition to the dist folder.
 #### `npm test`
 Validates the definition.
 
+#### `html-build`
+Builds the static HTML file that is served for the formatted documentation
+
 ## Contribution Guide
+
+### Spec vs Formatted Docs
+
+This repo uses [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) to split the spec into multiple files for ease of development over time.
+
 
 Below is a sample contribution guide. The tools
 in the repository don't restrict you to any
