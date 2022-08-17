@@ -33,13 +33,10 @@ This repo uses
 Starts the reference docs preview server.
 
 #### `npm run build`
-Bundles the definition to the dist folder.
+Bundles the definition to the dist folder then builds the static HTML file that is served for the formatted documentation
 
 #### `npm test`
 Validates the definition.
-
-#### `html-build`
-Builds the static HTML file that is served for the formatted documentation
 
 ## Contribution Guide
 
@@ -48,16 +45,7 @@ Builds the static HTML file that is served for the formatted documentation
 - This repo uses [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) to split the spec into multiple files for ease of development over time.
 - `redoc-cli` is then used to build a static html file that is served online.
 
-When updating docs:`*`
-1. Make updates to spec files
-2. Run `npm run build` to build an updated spec file as `dist.yaml`
-3. Run `npm run html-build` to build an updated `index.html` file
-4. Push to Github and the updates will appear automatically
-   
-`*`: This is temporary. Working on adding Github actions to automatically run the build commands when pushing new commits
-
-## Note on Redoc CLI
-The command to build the static HTML file uses a basic handlebars template (`custom.hbs`) for adding elements (e.g. favicon, Elm logo), and the build script for adding redoc configuration options (e.g. changing the Redoc color variables). `redocly.yaml` or `.redocly.yaml` does not work with `redoc-cli`. 
+After updating documentation, be sure to run `npm run build` to build the updated openAPI spec and accompanying static html file.
 
 ## Contributing
 
