@@ -2,6 +2,24 @@ summary: Get available retailers
 description: Returns a list of retailers that the user has access to
 get:
   summary: Get available retailers
+  parameters:
+    - in: query
+      name: type
+      required: true
+      schema:
+        type: string
+        enum:
+          - retailers
+          - metrics
+      example: type=retailers
+      description: Returns list of available retailers or available metrics (by retailer)
+    - in: query
+      name: retailer
+      required: false
+      schema:
+        type: string
+      example: type=sainsburys
+      description: Define retailer to return list of available metrics for when using `type=metrics`
   description: Returns a list of retailers that the user has access to
   operationId: get_retailers
   responses:
@@ -10,13 +28,10 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: A boolean indicating that the query was successful
-            example:
-              success: true
+            type: array
+            items:
+              type: string
+            example: ['amazon', 'sainsburys', 'tesco', 'shopify']
     '401':
       description: 'Invalid credentials'
       content:
