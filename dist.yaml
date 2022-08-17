@@ -139,6 +139,58 @@ components:
         store_description: 3322 London
         action: no_sales
         action_description: No sales recorded for this SKU in 4 weeks
+    dataSku:
+      type: object
+      properties:
+        week:
+          type: string
+          description: Date string representing the week
+        sku:
+          type: string
+          description: The product SKU
+        sku_product_name:
+          type: string
+          description: The product SKU and product name
+        metric_name:
+          type: string
+          description: >-
+            The selected metric. Additional metrics will appear as additional
+            properties
+      example:
+        week: '2022-06-12T23:00:00.000Z'
+        sku: 446677
+        sku_product_name: 446677 productName
+        revenue: 231
+    dataStore:
+      type: object
+      properties:
+        week:
+          type: string
+          description: Date string representing the week
+        store_id:
+          type: string
+          description: The store id
+        store_name:
+          type: string
+          description: The store name
+        sku:
+          type: string
+          description: The product SKU
+        sku_product_name:
+          type: string
+          description: The product SKU and product name
+        metric_name:
+          type: string
+          description: >-
+            The selected metric. Additional metrics will appear as additional
+            properties
+      example:
+        week: '2022-06-12T23:00:00.000Z'
+        store_id: 4
+        store_name: 4 London
+        sku: 446677
+        sku_product_name: 446677 productName
+        revenue: 44
   parameters:
     retailer:
       in: query
@@ -150,6 +202,22 @@ components:
         Name of retailer to pull data from. Use `/list` to list available
         retailer options.
       example: sainsburys
+    timeframe:
+      in: query
+      name: timeframe
+      required: true
+      schema:
+        type: string
+        enum:
+          - daily
+          - weekly
+      example: timeframe=daily
+      description: >
+        Return data by week or day.
+
+
+        Note: Store level data is weekly only. In addition not all combinations
+        of retailers and metrics will have acess to daily data.
 security:
   - ApiKeyAuth: []
 paths:
@@ -389,25 +457,10 @@ paths:
             type: string
             enum:
               - sku
-              - store
           example: type=sku
           description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
-        - in: query
-          name: timeframe
-          required: true
-          schema:
-            type: string
-            enum:
-              - daily
-              - weekly
-          example: timeframe=daily
-          description: >
-            Return data by week or day.
-
-
-            Note: Store level data is weekly only. In addition not all
-            combinations of retailers and metrics will have acess to daily data.
+        - $ref: '#/components/parameters/timeframe'
         - in: query
           name: metric
           required: true
@@ -428,19 +481,14 @@ paths:
               - scanning_ros
           description: >
             Which metric(s) should be returned. Multiple metrics can be returned
-            in one request when separated by a comma.
+            in one request when separated by a comma. E.g.
+            `metric=revenue,units,stock`
 
 
             Please note that not all metrics are available depending on
             retailer/timeframe/type selections. 
-
-
-            type=sku: `units, revenue, wastage, stock, lost_sales ,availability
-            ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling
-            ,stores_with_stock ,scanning_ros`
-
-
-            type=store: `units, revenue, wastage, stock, lost_sales`
+        - $ref: '#/components/parameters/retailer'
+        - $ref: '#/components/parameters/timeframe'
       description: ''
       operationId: ''
       responses:
@@ -449,13 +497,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    description: A boolean indicating that the query was successful
-                example:
-                  success: true
+                type: array
+                items:
+                  $ref: '#/components/schemas/dataSku'
         '401':
           description: Invalid credentials
           content:
@@ -493,21 +537,7 @@ paths:
           example: type=sku
           description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
-        - in: query
-          name: timeframe
-          required: true
-          schema:
-            type: string
-            enum:
-              - daily
-              - weekly
-          example: timeframe=daily
-          description: >
-            Return data by week or day.
-
-
-            Note: Store level data is weekly only. In addition not all
-            combinations of retailers and metrics will have acess to daily data.
+        - $ref: '#/components/parameters/timeframe'
         - in: query
           name: metric
           required: true
@@ -519,28 +549,16 @@ paths:
               - wastage
               - stock
               - lost_sales
-              - availability
-              - unit_ros
-              - revenue_ros
-              - ranged_stores
-              - stores_selling
-              - stores_with_stock
-              - scanning_ros
           description: >
             Which metric(s) should be returned. Multiple metrics can be returned
-            in one request when separated by a comma.
+            in one request when separated by a comma. E.g.
+            `metric=revenue,units,stock`
 
 
             Please note that not all metrics are available depending on
-            retailer/timeframe/type selections. 
-
-
-            type=sku: `units, revenue, wastage, stock, lost_sales ,availability
-            ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling
-            ,stores_with_stock ,scanning_ros`
-
-
-            type=store: `units, revenue, wastage, stock, lost_sales`
+            retailer/timeframe/type selections.
+        - $ref: '#/components/parameters/retailer'
+        - $ref: '#/components/parameters/timeframe'
       description: ''
       operationId: ''
       responses:
@@ -549,13 +567,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    description: A boolean indicating that the query was successful
-                example:
-                  success: true
+                type: array
+                items:
+                  $ref: '#/components/schemas/dataStore'
         '401':
           description: Invalid credentials
           content:
