@@ -8,8 +8,7 @@
   "private": true,
   "scripts": {
     "start": "openapi preview-docs",
-    "build": "openapi bundle -o dist",
-    "test": "openapi lint",
-    "html-build": "redoc-cli build dist.yaml -t docs/index.html --options.theme.colors.primary.main=#05C6B3 && mv redoc-static.html index.html"
+    "build": "openapi bundle -o dist && redoc-cli build dist.yaml -t docs/index.html && mv redoc-static.html index.html",
+    "test": "openapi lint"
   }
 }
