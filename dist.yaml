@@ -146,7 +146,9 @@ components:
       required: true
       schema:
         type: string
-      description: Name of retailer to pull data from. Use `/list` to list available retailer options.
+      description: >-
+        Name of retailer to pull data from. Use `/list` to list available
+        retailer options.
       example: sainsburys
 security:
   - ApiKeyAuth: []
@@ -193,8 +195,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorServer'
-      tags:
-        - test
   /actions:
     summary: Get all actions
     description: Returns a list of all available actions for the current user
@@ -216,71 +216,182 @@ paths:
                 items:
                   $ref: '#/components/schemas/action'
         '401':
-          description: Object indicating an unsuccesful query, with error message
+          description: Invalid credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorUnauthorized'
+        '403':
+          description: No beta access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Object indicating an unsuccesful query, with error message
+          description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/errorUnauthorized'
+                $ref: '#/components/schemas/errorServer'
       tags:
-        - actions
-  /data/retailers:
+        - Actions
+  /list?type=retailers:
     summary: Get available retailers
     description: Returns a list of retailers that the user has access to
     get:
       summary: Get available retailers
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - retailers
+          example: type=retailers
+          description: >-
+            Returns list of available retailers or available metrics (by
+            retailer)
       description: Returns a list of retailers that the user has access to
       operationId: get_retailers
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                  - amazon
+                  - sainsburys
+                  - tesco
+                  - shopify
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorUnauthorized'
+        '403':
+          description: No beta access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Default error sample response
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
       tags:
-        - general
-  /data/store:
-    summary: Return store data
+        - List
+  /list?type=metrics&retailer={retailer}:
+    summary: Get available metrics
+    description: Returns a list of metrics by retailer that the user has access to
     get:
-      summary: ''
+      summary: Get available metrics
       parameters:
-        - $ref: '#/components/parameters/retailer'
         - in: query
-          name: timeframe
+          name: type
           required: true
           schema:
             type: string
             enum:
-              - week
-          example: timeframe=week
-          description: Time incremement for returned data
+              - metrics
+          example: type=metrics
+          description: Returns list of available  metrics by retailer
         - in: query
-          name: metric
+          name: retailer
           required: true
           schema:
             type: string
-            enum:
-              - units
-              - revenue
-              - wastage
-              - stock
-              - lostsales
-          description: |
-            Which metric(s) should be returned
-      description: ''
-      operationId: ''
+          example: sainsburys
+          description: Define retailer to return list of available metrics
+      description: Returns a list of retailers that the user has access to
+      operationId: get_retailers
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  retailer:
+                    type: string
+                    description: The selected retailer
+                    example: waitrose
+                  sku_metrics:
+                    type: array
+                    items:
+                      type: string
+                      example: revenue
+                    description: Available metrics when returning data by SKU
+                  store_metrics:
+                    type: array
+                    items:
+                      type: string
+                      example: units
+                    description: Available metrics when returning data by store
+                example:
+                  retailer: tesco
+                  sku_metrics:
+                    - revenue
+                    - units
+                    - availability
+                    - wastage
+                    - unit_ros
+                    - value_ros
+                    - ranged_stores
+                    - stores_selling
+                    - stores_with_stock
+                  store_metrics:
+                    - revenue
+                    - units
+                    - wastage
+                    - lost_sales
+                    - unit_ros
+                    - value_ros
+                    - stock
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorUnauthorized'
+        '403':
+          description: No beta access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Default error sample response
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
       tags:
-        - data
-  /data/sku:
-    summary: Return sku data
+        - List
+  /data/type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+    summary: Get available metrics
+    description: Return data by SKU
     get:
-      summary: ''
+      summary: Return data by SKU
       parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - sku
+              - store
+          example: type=sku
+          description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
         - in: query
           name: timeframe
@@ -289,9 +400,14 @@ paths:
             type: string
             enum:
               - daily
-              - week
+              - weekly
           example: timeframe=daily
-          description: Time incremement for returned data
+          description: >
+            Return data by week or day.
+
+
+            Note: Store level data is weekly only. In addition not all
+            combinations of retailers and metrics will have acess to daily data.
         - in: query
           name: metric
           required: true
@@ -302,25 +418,161 @@ paths:
               - revenue
               - wastage
               - stock
+              - lost_sales
               - availability
-              - ros
-              - scanningros
-              - rangedstores
-              - storesselling
-              - storeswithstock
-              - storeswithsales
+              - unit_ros
+              - revenue_ros
+              - ranged_stores
+              - stores_selling
+              - stores_with_stock
+              - scanning_ros
           description: >
-            Which metric(s) should be returned. Please note that not all metrics
-            are available depending on retailer//timeframe selections. In
-            general when timeframe is daily: units, revenue, wastage, and
-            availability can be selected, and when timeframe is weekly: ros,
-            scanningros, rangedstores, storesselling, storesselling,
-            storesselling, storesselling, storeswithstock, storeswithsales can
-            be selected.
+            Which metric(s) should be returned. Multiple metrics can be returned
+            in one request when separated by a comma.
+
+
+            Please note that not all metrics are available depending on
+            retailer/timeframe/type selections. 
+
+
+            type=sku: `units, revenue, wastage, stock, lost_sales ,availability
+            ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling
+            ,stores_with_stock ,scanning_ros`
+
+
+            type=store: `units, revenue, wastage, stock, lost_sales`
       description: ''
       operationId: ''
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: A boolean indicating that the query was successful
+                example:
+                  success: true
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorUnauthorized'
+        '403':
+          description: No beta access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Default error sample response
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
       tags:
-        - data
+        - Data
+  /data/type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+    summary: Get available metrics
+    description: Return data by Store
+    get:
+      summary: Return data by Store
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - sku
+              - store
+          example: type=sku
+          description: Return data at a SKU or store level
+        - $ref: '#/components/parameters/retailer'
+        - in: query
+          name: timeframe
+          required: true
+          schema:
+            type: string
+            enum:
+              - daily
+              - weekly
+          example: timeframe=daily
+          description: >
+            Return data by week or day.
+
+
+            Note: Store level data is weekly only. In addition not all
+            combinations of retailers and metrics will have acess to daily data.
+        - in: query
+          name: metric
+          required: true
+          schema:
+            type: string
+            enum:
+              - units
+              - revenue
+              - wastage
+              - stock
+              - lost_sales
+              - availability
+              - unit_ros
+              - revenue_ros
+              - ranged_stores
+              - stores_selling
+              - stores_with_stock
+              - scanning_ros
+          description: >
+            Which metric(s) should be returned. Multiple metrics can be returned
+            in one request when separated by a comma.
+
+
+            Please note that not all metrics are available depending on
+            retailer/timeframe/type selections. 
+
+
+            type=sku: `units, revenue, wastage, stock, lost_sales ,availability
+            ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling
+            ,stores_with_stock ,scanning_ros`
+
+
+            type=store: `units, revenue, wastage, stock, lost_sales`
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: A boolean indicating that the query was successful
+                example:
+                  success: true
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorUnauthorized'
+        '403':
+          description: No beta access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorBeta'
+        default:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
+      tags:
+        - Data
