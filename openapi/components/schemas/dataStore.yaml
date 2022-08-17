@@ -1,0 +1,27 @@
+type: object
+properties:
+  week:
+    type: string
+    description: Date string representing the week
+  store_id:
+    type: string
+    description: The store id
+  store_name:
+    type: string
+    description: The store name
+  sku:
+    type: string
+    description: The product SKU
+  sku_product_name:
+    type: string
+    description: The product SKU and product name
+  metric_name:
+    type: string
+    description: The selected metric. Additional metrics will appear as additional properties
+example:
+  week: 2022-06-12T23:00:00.000Z
+  store_id: 4
+  store_name: 4 London
+  sku: 446677
+  sku_product_name: 446677 productName
+  revenue: 44

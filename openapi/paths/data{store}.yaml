@@ -42,13 +42,10 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: A boolean indicating that the query was successful
-            example:
-              success: true
+            type: array
+            items:
+              $ref: ../components/schemas/dataStore.yaml
+            
     '401':
       description: 'Invalid credentials'
       content:
