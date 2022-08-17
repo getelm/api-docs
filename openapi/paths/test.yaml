@@ -39,5 +39,3 @@ get:
         application/json:
           schema:
             $ref: ../components/schemas/errorServer.yaml
-  tags:
-    - Test

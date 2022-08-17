@@ -70,7 +70,9 @@ paths:
     $ref: paths/test.yaml
   /actions:
     $ref: paths/actions.yaml
-  /list:
-    $ref: paths/list.yaml
+  /list?type=retailers:
+    $ref: paths/list{retailers}.yaml
+  /list?type=metrics:
+    $ref: paths/list{metrics}.yaml
   /data:
     $ref: paths/data.yaml

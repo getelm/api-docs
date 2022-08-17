@@ -10,16 +10,8 @@ get:
         type: string
         enum:
           - retailers
-          - metrics
       example: type=retailers
       description: Returns list of available retailers or available metrics (by retailer)
-    - in: query
-      name: retailer
-      required: false
-      schema:
-        type: string
-      example: type=sainsburys
-      description: Define retailer to return list of available metrics for when using `type=metrics`
   description: Returns a list of retailers that the user has access to
   operationId: get_retailers
   responses:

@@ -1,0 +1,73 @@
+summary: Get available metrics
+description: Returns a list of metrics by retailer that the user has access to
+get:
+  summary: Get available metrics
+  parameters:
+    - in: query
+      name: type
+      required: true
+      schema:
+        type: string
+        enum:
+          - metrics
+      example: type=metrics
+      description: Returns list of available  metrics by retailer
+    - in: query
+      name: retailer
+      required: true
+      schema:
+        type: string
+      example: sainsburys
+      description: Define retailer to return list of available metrics
+  description: Returns a list of retailers that the user has access to
+  operationId: get_retailers
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              retailer:
+                type: string
+                description: The selected retailer
+                example: 'waitrose'
+              sku_metrics:
+                type: array
+                items: 
+                  type: string
+                  example: 'revenue'
+                description: Available metrics when returning data by SKU
+              store_metrics:
+                type: array
+                items: 
+                  type: string
+                  example: 'units'
+                description: Available metrics when returning data by store
+            example:
+              retailer: tesco
+              sku_metrics: [revenue, units, availability, wastage, unit_ros, value_ros, ranged_stores, stores_selling, stores_with_stock]
+              store_metrics: [revenue, units, wastage, lost_sales, unit_ros, value_ros, stock]
+            
+    '401':
+      description: 'Invalid credentials'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorUnauthorized.yaml
+    '403':
+      description: 'No beta access'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorBeta.yaml
+    default:
+      description: 'Server error'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorServer.yaml
+  tags:
+    - List
+
