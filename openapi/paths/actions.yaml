@@ -16,16 +16,22 @@ get:
             items:
               $ref: ../components/schemas/action.yaml
     '401':
-      description: 'Object indicating an unsuccesful query, with error message'
+      description: 'Invalid credentials'
       content:
         application/json:
           schema:
             $ref: ../components/schemas/errorUnauthorized.yaml
+    '403':
+      description: 'No beta access'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorBeta.yaml
     default:
-      description: 'Object indicating an unsuccesful query, with error message'
+      description: 'Server error'
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/errorUnauthorized.yaml
+            $ref: ../components/schemas/errorServer.yaml
   tags:
     - Actions

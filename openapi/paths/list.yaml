@@ -5,7 +5,36 @@ get:
   description: Returns a list of retailers that the user has access to
   operationId: get_retailers
   responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: A boolean indicating that the query was successful
+            example:
+              success: true
+    '401':
+      description: 'Invalid credentials'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorUnauthorized.yaml
+    '403':
+      description: 'No beta access'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorBeta.yaml
     default:
-      description: Default error sample response
+      description: 'Server error'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorServer.yaml
   tags:
     - List
+
