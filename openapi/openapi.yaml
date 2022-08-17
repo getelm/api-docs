@@ -1,7 +1,8 @@
 openapi: 3.0.1
 servers: 
   - url: https://api.getelm.co
-  
+    description: Live API server
+
 info:
   title: Elm API
   version: 1.0.0

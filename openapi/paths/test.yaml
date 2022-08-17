@@ -19,6 +19,8 @@ get:
               success:
                 type: boolean
                 description: A boolean indicating that the query was successful
+            example:
+              success: true
     '401':
       description: 'Invalid credentials'
       content:

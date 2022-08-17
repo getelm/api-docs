@@ -27,3 +27,13 @@ properties:
   action_description:
     type: string
     description: The action description.
+example:
+  client_name: myCompany
+  alert_date: 2022-08-15T23:00:00.000Z
+  sku_code: 33453
+  sku_description: 33453 - myCompany greatProduct
+  retailer: tesco
+  store_id: 1111
+  store_description: 3322 London
+  action: no_sales
+  action_description: No sales recorded for this SKU in 4 weeks
