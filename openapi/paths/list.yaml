@@ -8,4 +8,4 @@ get:
     default:
       description: Default error sample response
   tags:
-    - general
+    - List

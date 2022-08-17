@@ -70,9 +70,7 @@ paths:
     $ref: paths/test.yaml
   /actions:
     $ref: paths/actions.yaml
-  /data/retailers:
-    $ref: paths/data@retailers.yaml
-  /data/store:
-    $ref: paths/data@store.yaml
-  /data/sku:
-    $ref: paths/data@sku.yaml
+  /list:
+    $ref: paths/list.yaml
+  /data:
+    $ref: paths/data.yaml

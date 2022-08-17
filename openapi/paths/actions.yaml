@@ -28,4 +28,4 @@ get:
           schema:
             $ref: ../components/schemas/errorUnauthorized.yaml
   tags:
-    - actions
+    - Actions

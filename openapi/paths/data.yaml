@@ -2,6 +2,7 @@ summary: Return sku data
 get:
   summary: ''
   parameters:
+  
     - $ref: ../components/parameters/retailerParam.yaml
     - in: query
       name: timeframe
@@ -43,4 +44,4 @@ get:
     default:
       description: Default error sample response
   tags:
-    - data
+    - Data

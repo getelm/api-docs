@@ -40,4 +40,4 @@ get:
           schema:
             $ref: ../components/schemas/errorServer.yaml
   tags:
-    - test
+    - Test
