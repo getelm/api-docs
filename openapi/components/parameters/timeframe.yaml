@@ -1,0 +1,14 @@
+in: query
+name: timeframe
+required: true
+schema:
+  type: string
+  enum:
+    - daily
+    - weekly
+example: timeframe=daily
+description: >
+  Return data by week or day.
+
+
+  Note: Store level data is weekly only. In addition not all combinations of retailers and metrics will have acess to daily data.

@@ -10,24 +10,10 @@ get:
         type: string
         enum:
           - sku
-          - store
       example: type=sku
       description: Return data at a SKU or store level
     - $ref: ../components/parameters/retailer.yaml
-    - in: query
-      name: timeframe
-      required: true
-      schema:
-        type: string
-        enum:
-          - daily
-          - weekly
-      example: timeframe=daily
-      description: >
-        Return data by week or day.
-
-
-        Note: Store level data is weekly only. In addition not all combinations of retailers and metrics will have acess to daily data.
+    - $ref: ../components/parameters/timeframe.yaml
     - in: query
       name: metric
       required: true
@@ -47,17 +33,13 @@ get:
           - stores_with_stock
           - scanning_ros
       description: >
-        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma.
+        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma. E.g. `metric=revenue,units,stock`
         
 
         Please note that not all metrics are
         available depending on retailer/timeframe/type selections. 
-
-
-        type=sku: `units, revenue, wastage, stock, lost_sales ,availability ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling ,stores_with_stock ,scanning_ros`
-
-
-        type=store: `units, revenue, wastage, stock, lost_sales`
+    - $ref: ../components/parameters/retailer.yaml
+    - $ref: ../components/parameters/timeframe.yaml
   description: ''
   operationId: ''
   responses:
@@ -66,13 +48,9 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: A boolean indicating that the query was successful
-            example:
-              success: true
+            type: array
+            items:
+              $ref: ../components/schemas/dataSku.yaml
     '401':
       description: 'Invalid credentials'
       content:
