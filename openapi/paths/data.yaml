@@ -2,7 +2,16 @@ summary: Return sku data
 get:
   summary: ''
   parameters:
-  
+    - in: query
+      name: type
+      required: true
+      schema:
+        type: string
+        enum:
+          - sku
+          - store
+      example: type=sku
+      description: Return data at a SKU or store level
     - $ref: ../components/parameters/retailerParam.yaml
     - in: query
       name: timeframe
@@ -11,9 +20,13 @@ get:
         type: string
         enum:
           - daily
-          - week
+          - weekly
       example: timeframe=daily
-      description: Time incremement for returned data
+      description: >
+        Return data by week or day.
+
+
+        Note: Store level data is weekly only. In addition not all combinations of retailers and metrics will have acess to daily data.
     - in: query
       name: metric
       required: true
@@ -24,20 +37,26 @@ get:
           - revenue
           - wastage
           - stock
+          - lost_sales
           - availability
-          - ros
-          - scanningros
-          - rangedstores
-          - storesselling
-          - storeswithstock
-          - storeswithsales
+          - unit_ros
+          - revenue_ros
+          - ranged_stores
+          - stores_selling
+          - stores_with_stock
+          - scanning_ros
       description: >
-        Which metric(s) should be returned. Please note that not all metrics are
-        available depending on retailer//timeframe selections. In general when
-        timeframe is daily: units, revenue, wastage, and availability can be
-        selected, and when timeframe is weekly: ros, scanningros, rangedstores,
-        storesselling, storesselling, storesselling, storesselling,
-        storeswithstock, storeswithsales can be selected.
+        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma.
+        
+
+        Please note that not all metrics are
+        available depending on retailer/timeframe/type selections. 
+
+
+        type=sku: `units, revenue, wastage, stock, lost_sales ,availability ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling ,stores_with_stock ,scanning_ros`
+
+
+        type=store: `units, revenue, wastage, stock, lost_sales`
   description: ''
   operationId: ''
   responses:
