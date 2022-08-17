@@ -28,7 +28,7 @@ get:
             properties:
               success:
                 type: boolean
-                description: A boolean indicating that the query was unsuccessful\
+                description: A boolean indicating that the query was unsuccessful
               error:
                 type: string
                 description: Error message

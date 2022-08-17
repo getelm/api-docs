@@ -2,42 +2,33 @@ openapi: 3.0.1
 info:
   title: Elm API
   version: 1.0.0
+  contact:
+    name: Contact
+    email: hello@getelm.co
+  termsOfService: 'https://getelm.co/terms-of-service/'
+  server: 
+    url: https://api.getelm.co
+    description: API server
   description: >
     # Introduction
 
     The elm API has been designed in order to give users access to our collected
-    database of user
-
-    information.
-
-
-    # How to use this API
-
+    database of user information.
 
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
-    API key please make
-
-    sure that you have opted into the beta by speaking with a representative
-    from Elm and that you
-
-    have admin level access to your Elm account. 
+    API key please make sure that you have opted into the beta by speaking with a representative
+    from Elm and that you have admin level access to your Elm account. 
 
 
-    Log in to your account and navigate to Account Settings and click on the API
-    tab. On this page
-
-    you will be able to generate an API key, view your key, and regenerate your
-    key if your existing
-
-    one is lost or exposed.
+    Log in to your account, navigate to Account Settings and click on the API
+    tab. On this page you will be able to generate an API key, view your key, and regenerate your
+    key if your existing one is lost or exposed.
 
 
     Please note that API keys are sensitive pieces of information and as such
-    should be kept secret,
-
-    like a password.
+    should be kept secret, like a password.
 
 
     # Authentication
@@ -64,8 +55,7 @@ info:
       --url http://localhost:3002/api/test/ \
       --header 'Authorization: <your token>'
     ```
-  contact:
-    email: hello@getelm.co
+  
 components:
   securitySchemes:
     ApiKeyAuth:
