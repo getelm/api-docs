@@ -1,0 +1,29 @@
+type: object
+properties:
+  client_name:
+    type: string
+    description: The client name.
+  alert_date:
+    type: string
+    description: The date of the alert.
+  sku_code:
+    type: string
+    description: The SKU code.
+  sku_description:
+    type: string
+    description: The SKU name.
+  retailer:
+    type: string
+    description: The retailer name.
+  store_id:
+    type: string
+    description: The store id.
+  store_description:
+    type: string
+    description: The store name.
+  action:
+    type: string
+    description: The action.
+  action_description:
+    type: string
+    description: The action description.

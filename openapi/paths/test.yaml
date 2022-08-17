@@ -10,7 +10,7 @@ get:
   operationId: test_connection
   responses:
     '200':
-      description: Object indicating success
+      description: OK
       content:
         application/json:
           schema:
@@ -20,30 +20,22 @@ get:
                 type: boolean
                 description: A boolean indicating that the query was successful
     '401':
-      description: 'Object indicating an unsuccesful query, with error message'
+      description: 'Invalid credentials'
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: A boolean indicating that the query was unsuccessful
-              error:
-                type: string
-                description: Error message
+            $ref: ../components/schemas/errorUnauthorized.yaml
+    '403':
+      description: 'No beta access'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorBeta.yaml
     default:
-      description: 'Object indicating an unsuccesful query, with error message'
+      description: 'Server error'
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: A boolean indicating that the query was unsuccessful\
-              error:
-                type: string
-                description: Error message
+            $ref: ../components/schemas/errorServer.yaml
   tags:
     - test

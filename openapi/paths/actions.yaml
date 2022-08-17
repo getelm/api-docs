@@ -1,21 +1,31 @@
 summary: Get all actions
 description: Returns a list of all available actions for the current user
 get:
-  summary: Get all actions
-  description: Returns a list of all available actions
+  summary: Get all actions by retailer
+  description: Returns a list of all available actions and accompanying information by retailer
   parameters:
-    - in: query
-      name: status
-      required: false
-      schema:
-        type: string
-        enum:
-          - complete
-          - incomplete
-      description: Filters returned actions by status
+    - $ref: ../components/parameters/retailerParam.yaml
   operationId: get_actions
   responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/action.yaml
+    '401':
+      description: 'Object indicating an unsuccesful query, with error message'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorUnauthorized.yaml
     default:
-      description: Default error sample response
+      description: 'Object indicating an unsuccesful query, with error message'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorUnauthorized.yaml
   tags:
     - actions

@@ -1,4 +1,7 @@
 openapi: 3.0.1
+servers: 
+  - url: https://api.getelm.co
+  
 info:
   title: Elm API
   version: 1.0.0
@@ -6,9 +9,6 @@ info:
     name: Contact
     email: hello@getelm.co
   termsOfService: 'https://getelm.co/terms-of-service/'
-  server: 
-    url: https://api.getelm.co
-    description: API server
   description: >
     # Introduction
 
@@ -52,7 +52,7 @@ info:
     ```
 
     curl --request GET \
-      --url http://localhost:3002/api/test/ \
+      --url https://api.getelm.co/api/test/ \
       --header 'Authorization: <your token>'
     ```
   

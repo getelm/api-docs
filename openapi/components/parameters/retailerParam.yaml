@@ -4,4 +4,4 @@ required: true
 schema:
   type: string
 description: Name of retailer to pull data from
-example: retailer=sainsburys
+example: sainsburys
