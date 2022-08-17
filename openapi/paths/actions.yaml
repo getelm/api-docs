@@ -4,7 +4,7 @@ get:
   summary: Get all actions by retailer
   description: Returns a list of all available actions and accompanying information by retailer
   parameters:
-    - $ref: ../components/parameters/retailerParam.yaml
+    - $ref: ../components/parameters/retailer.yaml
   operationId: get_actions
   responses:
     '200':

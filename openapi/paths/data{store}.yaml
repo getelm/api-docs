@@ -1,6 +1,7 @@
-summary: Return sku data
+summary: Get available metrics
+description: Return data by Store
 get:
-  summary: ''
+  summary: Return data by Store
   parameters:
     - in: query
       name: type
@@ -12,7 +13,7 @@ get:
           - store
       example: type=sku
       description: Return data at a SKU or store level
-    - $ref: ../components/parameters/retailerParam.yaml
+    - $ref: ../components/parameters/retailer.yaml
     - in: query
       name: timeframe
       required: true

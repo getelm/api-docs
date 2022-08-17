@@ -1,0 +1,95 @@
+summary: Get available metrics
+description: Return data by SKU
+get:
+  summary: Return data by SKU
+  parameters:
+    - in: query
+      name: type
+      required: true
+      schema:
+        type: string
+        enum:
+          - sku
+          - store
+      example: type=sku
+      description: Return data at a SKU or store level
+    - $ref: ../components/parameters/retailer.yaml
+    - in: query
+      name: timeframe
+      required: true
+      schema:
+        type: string
+        enum:
+          - daily
+          - weekly
+      example: timeframe=daily
+      description: >
+        Return data by week or day.
+
+
+        Note: Store level data is weekly only. In addition not all combinations of retailers and metrics will have acess to daily data.
+    - in: query
+      name: metric
+      required: true
+      schema:
+        type: string
+        enum:
+          - units
+          - revenue
+          - wastage
+          - stock
+          - lost_sales
+          - availability
+          - unit_ros
+          - revenue_ros
+          - ranged_stores
+          - stores_selling
+          - stores_with_stock
+          - scanning_ros
+      description: >
+        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma.
+        
+
+        Please note that not all metrics are
+        available depending on retailer/timeframe/type selections. 
+
+
+        type=sku: `units, revenue, wastage, stock, lost_sales ,availability ,unit_ros ,revenue_ros ,ranged_stores ,stores_selling ,stores_with_stock ,scanning_ros`
+
+
+        type=store: `units, revenue, wastage, stock, lost_sales`
+  description: ''
+  operationId: ''
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: A boolean indicating that the query was successful
+            example:
+              success: true
+    '401':
+      description: 'Invalid credentials'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorUnauthorized.yaml
+    '403':
+      description: 'No beta access'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorBeta.yaml
+    default:
+      description: 'Server error'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorServer.yaml
+  tags:
+    - Data

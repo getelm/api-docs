@@ -2,7 +2,7 @@ summary: Return store data
 get:
   summary: ''
   parameters:
-    - $ref: ../components/parameters/retailerParam.yaml
+    - $ref: ../components/parameters/retailer.yaml
     - in: query
       name: timeframe
       required: true

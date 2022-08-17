@@ -140,7 +140,7 @@ components:
         action: no_sales
         action_description: No sales recorded for this SKU in 4 weeks
   parameters:
-    retailerParam:
+    retailer:
       in: query
       name: retailer
       required: true
@@ -204,7 +204,7 @@ paths:
         Returns a list of all available actions and accompanying information by
         retailer
       parameters:
-        - $ref: '#/components/parameters/retailerParam'
+        - $ref: '#/components/parameters/retailer'
       operationId: get_actions
       responses:
         '200':
@@ -246,7 +246,7 @@ paths:
     get:
       summary: ''
       parameters:
-        - $ref: '#/components/parameters/retailerParam'
+        - $ref: '#/components/parameters/retailer'
         - in: query
           name: timeframe
           required: true
@@ -281,7 +281,7 @@ paths:
     get:
       summary: ''
       parameters:
-        - $ref: '#/components/parameters/retailerParam'
+        - $ref: '#/components/parameters/retailer'
         - in: query
           name: timeframe
           required: true
