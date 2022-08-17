@@ -1,0 +1,15 @@
+# See https://redoc.ly/docs/cli/configuration/ for more information.
+apis:
+  main@v1:
+    root: openapi/openapi.yaml
+lint:
+  extends:
+    - recommended
+  rules:
+    no-unused-components: warning
+features.openapi:
+  htmlTemplate: ./docs/index.html
+  theme:
+    colors:
+      primary:
+        main: "#05C6B3"
