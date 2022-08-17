@@ -2,9 +2,10 @@
 <html>
   <head>
     <title>API Reference | ReDoc</title>
+    <title>{{title}}</title>
     <!-- needed for adaptive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="./favicon.ico">
 
     <!--
     ReDoc uses font options from the parent element
@@ -15,10 +16,25 @@
         margin: 0;
         padding: 0;
       }
+      #topbar {
+      background-color: #38A08E;
+      display: flex;
+      margin-bottom: 1rem;
+    }
+
+    #logoLink {
+        margin: auto;
+    }
+
+    #logo {
+      height: 3rem;
+      margin: 0.5rem;
+    }
     </style>
     {{{redocHead}}}
   </head>
   <body>
+    <section id="topbar"><a id="logoLink" href="https://getelm.co/"><img id="logo" src="./logoWhite.png" /></a></section>
     {{{redocHTML}}}
   </body>
 </html>

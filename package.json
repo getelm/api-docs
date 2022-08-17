@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "dependencies": {
     "@redocly/openapi-cli": "*",
-    "handlebars": "^4.7.7",
     "redoc-cli": "^0.13.18"
   },
   "private": true,
@@ -11,6 +10,6 @@
     "start": "openapi preview-docs",
     "build": "openapi bundle -o dist",
     "test": "openapi lint",
-    "html-build": "redoc-cli build dist.yaml -t custom.hbs --options.theme.colors.primary.main=#05C6B3 && mv redoc-static.html index.html"
+    "html-build": "redoc-cli build dist.yaml -t docs/index.html --options.theme.colors.primary.main=#05C6B3 && mv redoc-static.html index.html"
   }
 }
