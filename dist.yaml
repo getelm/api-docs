@@ -211,13 +211,13 @@ components:
         enum:
           - daily
           - weekly
-      example: timeframe=daily
+      example: daily
       description: >
         Return data by week or day.
 
 
-        Note: Store level data is weekly only. In addition not all combinations
-        of retailers and metrics will have acess to daily data.
+        Note: Not all combinations of retailers and metrics will have acess to
+        daily data.
 security:
   - ApiKeyAuth: []
 paths:
@@ -457,7 +457,7 @@ paths:
             type: string
             enum:
               - sku
-          example: type=sku
+          example: sku
           description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
         - $ref: '#/components/parameters/timeframe'
@@ -487,6 +487,7 @@ paths:
 
             Please note that not all metrics are available depending on
             retailer/timeframe/type selections. 
+          example: revenue
         - $ref: '#/components/parameters/retailer'
         - $ref: '#/components/parameters/timeframe'
       description: ''
@@ -534,7 +535,7 @@ paths:
             enum:
               - sku
               - store
-          example: type=sku
+          example: sku
           description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
         - $ref: '#/components/parameters/timeframe'
@@ -557,8 +558,18 @@ paths:
 
             Please note that not all metrics are available depending on
             retailer/timeframe/type selections.
+          example: wastage
         - $ref: '#/components/parameters/retailer'
-        - $ref: '#/components/parameters/timeframe'
+        - in: query
+          name: timeframe
+          required: true
+          schema:
+            type: string
+            enum:
+              - weekly
+          example: weekly
+          description: |
+            Return data by week
       description: ''
       operationId: ''
       responses:
