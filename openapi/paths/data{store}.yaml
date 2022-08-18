@@ -14,7 +14,16 @@ get:
       example: sku
       description: Return data at a SKU or store level
     - $ref: ../components/parameters/retailer.yaml
-    - $ref: ../components/parameters/timeframe.yaml
+    - in: query
+      name: timeframe
+      required: true
+      schema:
+        type: string
+        enum:
+          - weekly
+      example: weekly
+      description: >
+        Return data by week
     - in: query
       name: metric
       required: true
@@ -33,17 +42,10 @@ get:
         Please note that not all metrics are
         available depending on retailer/timeframe/type selections.
       example: wastage
-    - $ref: ../components/parameters/retailer.yaml
-    - in: query
-      name: timeframe
-      required: true
-      schema:
-        type: string
-        enum:
-          - weekly
-      example: weekly
-      description: >
-        Return data by week
+    - $ref: ../components/parameters/datefrom.yaml
+    - $ref: ../components/parameters/dateto.yaml
+    - $ref: ../components/parameters/sku.yaml
+    
   description: ''
   operationId: ''
   responses:

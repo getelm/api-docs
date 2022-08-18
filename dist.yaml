@@ -194,6 +194,30 @@ components:
 
         Note: Not all combinations of retailers and metrics will have acess to
         daily data.
+    datefrom:
+      in: query
+      name: datefrom
+      required: true
+      schema:
+        type: string
+      description: Date from which to begin pulling data in the format YYYY-MM-DD
+      example: '2022-08-13'
+    dateto:
+      in: query
+      name: dateto
+      required: true
+      schema:
+        type: string
+      description: Date on which to end pulling data in the format YYYY-MM-DD
+      example: '2022-10-18'
+    sku:
+      in: query
+      name: sku
+      required: false
+      schema:
+        type: string
+      description: SKU code used to filter data down to a specific SKU.
+      example: 55467
 security:
   - ApiKeyAuth: []
 paths:
@@ -416,8 +440,9 @@ paths:
             Please note that not all metrics are available depending on
             retailer/timeframe/type selections. 
           example: revenue
-        - $ref: '#/components/parameters/retailer'
-        - $ref: '#/components/parameters/timeframe'
+        - $ref: '#/components/parameters/datefrom'
+        - $ref: '#/components/parameters/dateto'
+        - $ref: '#/components/parameters/sku'
       description: ''
       operationId: ''
       responses:
@@ -454,7 +479,16 @@ paths:
           example: sku
           description: Return data at a SKU or store level
         - $ref: '#/components/parameters/retailer'
-        - $ref: '#/components/parameters/timeframe'
+        - in: query
+          name: timeframe
+          required: true
+          schema:
+            type: string
+            enum:
+              - weekly
+          example: weekly
+          description: |
+            Return data by week
         - in: query
           name: metric
           required: true
@@ -475,17 +509,9 @@ paths:
             Please note that not all metrics are available depending on
             retailer/timeframe/type selections.
           example: wastage
-        - $ref: '#/components/parameters/retailer'
-        - in: query
-          name: timeframe
-          required: true
-          schema:
-            type: string
-            enum:
-              - weekly
-          example: weekly
-          description: |
-            Return data by week
+        - $ref: '#/components/parameters/datefrom'
+        - $ref: '#/components/parameters/dateto'
+        - $ref: '#/components/parameters/sku'
       description: ''
       operationId: ''
       responses:

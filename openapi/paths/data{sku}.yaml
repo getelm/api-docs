@@ -39,8 +39,9 @@ get:
         Please note that not all metrics are
         available depending on retailer/timeframe/type selections. 
       example: revenue
-    - $ref: ../components/parameters/retailer.yaml
-    - $ref: ../components/parameters/timeframe.yaml
+    - $ref: ../components/parameters/datefrom.yaml
+    - $ref: ../components/parameters/dateto.yaml
+    - $ref: ../components/parameters/sku.yaml
   description: ''
   operationId: ''
   responses:
