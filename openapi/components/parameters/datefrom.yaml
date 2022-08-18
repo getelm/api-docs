@@ -4,3 +4,4 @@ required: true
 schema:
   type: string
 description: Date from which to begin pulling data in the format YYYY-MM-DD
+example: 2022-08-13

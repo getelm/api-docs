@@ -11,7 +11,7 @@ get:
         enum:
           - sku
           - store
-      example: type=sku
+      example: sku
       description: Return data at a SKU or store level
     - $ref: ../components/parameters/retailer.yaml
     - $ref: ../components/parameters/timeframe.yaml
@@ -32,8 +32,18 @@ get:
 
         Please note that not all metrics are
         available depending on retailer/timeframe/type selections.
+      example: wastage
     - $ref: ../components/parameters/retailer.yaml
-    - $ref: ../components/parameters/timeframe.yaml
+    - in: query
+      name: timeframe
+      required: true
+      schema:
+        type: string
+        enum:
+          - weekly
+      example: weekly
+      description: >
+        Return data by week
   description: ''
   operationId: ''
   responses:

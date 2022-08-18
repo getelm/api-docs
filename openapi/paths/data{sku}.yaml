@@ -10,7 +10,7 @@ get:
         type: string
         enum:
           - sku
-      example: type=sku
+      example: sku
       description: Return data at a SKU or store level
     - $ref: ../components/parameters/retailer.yaml
     - $ref: ../components/parameters/timeframe.yaml
@@ -38,6 +38,7 @@ get:
 
         Please note that not all metrics are
         available depending on retailer/timeframe/type selections. 
+      example: revenue
     - $ref: ../components/parameters/retailer.yaml
     - $ref: ../components/parameters/timeframe.yaml
   description: ''

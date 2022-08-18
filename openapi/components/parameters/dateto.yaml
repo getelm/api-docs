@@ -4,4 +4,4 @@ required: true
 schema:
   type: string
 description: Date on which to end pulling data in the format YYYY-MM-DD
-example: 2022-08-13
+example: 2022-10-18
