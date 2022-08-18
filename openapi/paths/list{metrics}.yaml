@@ -49,21 +49,8 @@ get:
               retailer: tesco
               sku_metrics: [revenue, units, availability, wastage, unit_ros, value_ros, ranged_stores, stores_selling, stores_with_stock]
               store_metrics: [revenue, units, wastage, lost_sales, unit_ros, value_ros, stock]
-            
-    '401':
-      description: 'Invalid credentials'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorUnauthorized.yaml
-    '403':
-      description: 'No beta access'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorBeta.yaml
     default:
-      description: 'Server error'
+      description: 'Error'
       content:
         application/json:
           schema:

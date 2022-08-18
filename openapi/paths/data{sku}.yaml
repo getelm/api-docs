@@ -52,20 +52,8 @@ get:
             type: array
             items:
               $ref: ../components/schemas/dataSku.yaml
-    '401':
-      description: 'Invalid credentials'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorUnauthorized.yaml
-    '403':
-      description: 'No beta access'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorBeta.yaml
     default:
-      description: 'Server error'
+      description: 'Error'
       content:
         application/json:
           schema:
