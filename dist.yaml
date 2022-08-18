@@ -75,30 +75,6 @@ components:
       example:
         success: false
         error: Server error. Please review your request and try again
-    errorUnauthorized:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: A boolean indicating that the query was unsuccessful
-        error:
-          type: string
-          description: Error message
-      example:
-        success: false
-        error: Invalid credentials
-    errorBeta:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: A boolean indicating that the query was unsuccessful
-        error:
-          type: string
-          description: Error message
-      example:
-        success: false
-        error: You do not have access to the API beta
     action:
       type: object
       properties:
@@ -245,20 +221,8 @@ paths:
                     description: A boolean indicating that the query was successful
                 example:
                   success: true
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
@@ -283,20 +247,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/action'
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
@@ -336,20 +288,8 @@ paths:
                   - sainsburys
                   - tesco
                   - shopify
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
@@ -424,20 +364,8 @@ paths:
                     - unit_ros
                     - value_ros
                     - stock
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
@@ -501,20 +429,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/dataSku'
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
@@ -581,20 +497,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/dataStore'
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorUnauthorized'
-        '403':
-          description: No beta access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorBeta'
         default:
-          description: Server error
+          description: Error
           content:
             application/json:
               schema:
