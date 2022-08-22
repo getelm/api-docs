@@ -1,5 +1,6 @@
 summary: Get available metrics
-description: Return data by Store
+description: >-
+  Use the data by Store endpoint to retrieve sales and other data points grouped by sku and store id / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
 get:
   summary: Return data by Store
   parameters:
@@ -21,6 +22,7 @@ get:
         type: string
         enum:
           - weekly
+          - monthly
       example: weekly
       description: >
         Return data by week
@@ -44,9 +46,9 @@ get:
       example: wastage
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
-    - $ref: ../components/parameters/sku.yaml
-    
-  description: ''
+    - $ref: ../components/parameters/sku.yaml 
+  description:  >-
+    Use the data by Store endpoint to retrieve sales and other data points grouped by SKU and store ID / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
   operationId: ''
   responses:
     '200':

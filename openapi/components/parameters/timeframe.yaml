@@ -6,9 +6,10 @@ schema:
   enum:
     - daily
     - weekly
+    - monthly
 example: daily
 description: >
   Return data by week or day.
 
 
-  Note: Not all combinations of retailers and metrics will have acess to daily data.
+  Note: Not all combinations of retailers and metrics will have access to daily data.
