@@ -13,19 +13,21 @@ info:
   description: >
     # Introduction
 
-    The elm API has been designed in order to give users access to our collected
-    database of user information.
+    We’ve designed the elm API to give FMCG brands and third parties easier access to their key sales data. See more info below on how to fetch data from the elm API.
 
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
-    API key please make sure that you have opted into the beta by speaking with a representative
-    from Elm and that you have admin level access to your Elm account. 
+    API key please make sure that you have admin level access to your Elm account. 
 
 
-    Log in to your account, navigate to Account Settings and click on the API
-    tab. On this page you will be able to generate an API key, view your key, and regenerate your
-    key if your existing one is lost or exposed.
+    To generate your API key:
+
+    - Log in to your account and, navigate to Account Settings 
+
+    - Visit the API tab
+
+    - On this page you will be able to generate an API key, view your key, and regenerate your key if your existing one is lost or exposed.
 
 
     Please note that API keys are sensitive pieces of information and as such
@@ -37,7 +39,8 @@ info:
     Once you have your API key, you can use it for authentication by including
     it in the authorization header of your requests.
 
-    **Headers**
+
+    **Headers:**
 
     ```
 
@@ -68,8 +71,6 @@ security:
 paths:
   /test:
     $ref: paths/test.yaml
-  /actions:
-    $ref: paths/actions.yaml
   /list?type=retailers:
     $ref: paths/list{retailers}.yaml
   /list?type=metrics&retailer={retailer}:
@@ -78,3 +79,5 @@ paths:
     $ref: paths/data{sku}.yaml
   /data/type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     $ref: paths/data{store}.yaml
+  /actions:
+    $ref: paths/actions.yaml

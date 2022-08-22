@@ -5,8 +5,8 @@ description: >-
 get:
   summary: Test your connection
   description: >-
-    Test that you are correctly connecting to the API. Will return a success or
-    error message accordingly
+    Test that you are correctly connecting to the API and return a success or
+    error message accordingly.
   operationId: test_connection
   responses:
     '200':
