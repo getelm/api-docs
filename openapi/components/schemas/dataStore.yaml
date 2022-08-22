@@ -5,7 +5,7 @@ properties:
     description: Date string representing the week
   store_id:
     type: string
-    description: The store id
+    description: The store ID
   store_name:
     type: string
     description: The store name

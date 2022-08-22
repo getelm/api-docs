@@ -17,7 +17,7 @@ properties:
     description: The retailer name.
   store_id:
     type: string
-    description: The store id.
+    description: The store ID.
   store_description:
     type: string
     description: The store name.
