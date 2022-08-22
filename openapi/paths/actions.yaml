@@ -1,8 +1,17 @@
 summary: Get all actions
-description: Returns a list of all available actions for the current user
+description: >-
+  This data set returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
+  
+  
+  Note: Actions are refreshed weekly and so please plan your API requests accordingly. We’d recommend pulling through actions on a Tuesday.
+
 get:
   summary: Get all actions by retailer
-  description: Returns a list of all available actions and accompanying information by retailer
+  description: >-
+    This data set returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
+  
+  
+    Note: Actions are refreshed weekly and so please plan your API requests accordingly. We’d recommend pulling through actions on a Tuesday.
   parameters:
     - $ref: ../components/parameters/retailer.yaml
   operationId: get_actions
