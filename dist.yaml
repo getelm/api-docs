@@ -12,20 +12,26 @@ info:
   description: >
     # Introduction
 
-    The elm API has been designed in order to give users access to our collected
-    database of user information.
+    We’ve designed the elm API to give FMCG brands and third parties easier
+    access to their key sales data. See more info below on how to fetch data
+    from the elm API.
 
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
-    API key please make sure that you have opted into the beta by speaking with
-    a representative from Elm and that you have admin level access to your Elm
+    API key please make sure that you have admin level access to your Elm
     account. 
 
 
-    Log in to your account, navigate to Account Settings and click on the API
-    tab. On this page you will be able to generate an API key, view your key,
-    and regenerate your key if your existing one is lost or exposed.
+    To generate your API key:
+
+    - Log in to your account and, navigate to [Account
+    Settings](https://dashboard.getelm.co/account) 
+
+    - Visit the API tab
+
+    - On this page you will be able to generate an API key, view your key, and
+    regenerate your key if your existing one is lost or exposed.
 
 
     Please note that API keys are sensitive pieces of information and as such
@@ -37,7 +43,8 @@ info:
     Once you have your API key, you can use it for authentication by including
     it in the authorization header of your requests.
 
-    **Headers**
+
+    **Headers:**
 
     ```
 
@@ -75,46 +82,6 @@ components:
       example:
         success: false
         error: Server error. Please review your request and try again
-    action:
-      type: object
-      properties:
-        client_name:
-          type: string
-          description: The client name.
-        alert_date:
-          type: string
-          description: The date of the alert.
-        sku_code:
-          type: string
-          description: The SKU code.
-        sku_description:
-          type: string
-          description: The SKU name.
-        retailer:
-          type: string
-          description: The retailer name.
-        store_id:
-          type: string
-          description: The store id.
-        store_description:
-          type: string
-          description: The store name.
-        action:
-          type: string
-          description: The action.
-        action_description:
-          type: string
-          description: The action description.
-      example:
-        client_name: myCompany
-        alert_date: '2022-08-15T23:00:00.000Z'
-        sku_code: 33453
-        sku_description: 33453 - myCompany greatProduct
-        retailer: tesco
-        store_id: 1111
-        store_description: 3322 London
-        action: no_sales
-        action_description: No sales recorded for this SKU in 4 weeks
     dataSku:
       type: object
       properties:
@@ -145,7 +112,7 @@ components:
           description: Date string representing the week
         store_id:
           type: string
-          description: The store id
+          description: The store ID
         store_name:
           type: string
           description: The store name
@@ -167,6 +134,46 @@ components:
         sku: 446677
         sku_product_name: 446677 productName
         revenue: 44
+    action:
+      type: object
+      properties:
+        client_name:
+          type: string
+          description: The client name.
+        alert_date:
+          type: string
+          description: The date of the alert.
+        sku_code:
+          type: string
+          description: The SKU code.
+        sku_description:
+          type: string
+          description: The SKU name.
+        retailer:
+          type: string
+          description: The retailer name.
+        store_id:
+          type: string
+          description: The store ID.
+        store_description:
+          type: string
+          description: The store name.
+        action:
+          type: string
+          description: The action.
+        action_description:
+          type: string
+          description: The action description.
+      example:
+        client_name: myCompany
+        alert_date: '2022-08-15T23:00:00.000Z'
+        sku_code: 33453
+        sku_description: 33453 - myCompany greatProduct
+        retailer: tesco
+        store_id: 1111
+        store_description: 3322 London
+        action: no_sales
+        action_description: No sales recorded for this SKU in 4 weeks
   parameters:
     retailer:
       in: query
@@ -187,13 +194,14 @@ components:
         enum:
           - daily
           - weekly
+          - monthly
       example: daily
       description: >
         Return data by week or day.
 
 
-        Note: Not all combinations of retailers and metrics will have acess to
-        daily data.
+        **Note:** Not all combinations of retailers and metrics will have access
+        to daily data.
     datefrom:
       in: query
       name: datefrom
@@ -229,8 +237,8 @@ paths:
     get:
       summary: Test your connection
       description: >-
-        Test that you are correctly connecting to the API. Will return a success
-        or error message accordingly
+        Test that you are correctly connecting to the API and return a success
+        or error message accordingly.
       operationId: test_connection
       responses:
         '200':
@@ -251,37 +259,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorServer'
-  /actions:
-    summary: Get all actions
-    description: Returns a list of all available actions for the current user
-    get:
-      summary: Get all actions by retailer
-      description: >-
-        Returns a list of all available actions and accompanying information by
-        retailer
-      parameters:
-        - $ref: '#/components/parameters/retailer'
-      operationId: get_actions
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/action'
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
-      tags:
-        - Actions
   /list?type=retailers:
     summary: Get available retailers
-    description: Returns a list of retailers that the user has access to
+    description: >-
+      This data set returns a list of the retailer connections that a user has
+      access to in their elm account. To add further retailers/customers please
+      visit the “Manage Connections” section of your elm dashboard.
     get:
       summary: Get available retailers
       parameters:
@@ -292,11 +275,14 @@ paths:
             type: string
             enum:
               - retailers
-          example: type=retailers
+          example: retailers
           description: >-
             Returns list of available retailers or available metrics (by
             retailer)
-      description: Returns a list of retailers that the user has access to
+      description: >-
+        This data set returns a list of the retailer connections that a user has
+        access to in their elm account. To add further retailers/customers
+        please visit the “Manage Connections” section of your elm dashboard.
       operationId: get_retailers
       responses:
         '200':
@@ -322,7 +308,10 @@ paths:
         - List
   /list?type=metrics&retailer={retailer}:
     summary: Get available metrics
-    description: Returns a list of metrics by retailer that the user has access to
+    description: >-
+      This endpoint returns a list of the available metrics that can be pulled
+      from each data set. This can vary depending on the data connection due to
+      the granularity of data available for each retailer.
     get:
       summary: Get available metrics
       parameters:
@@ -333,7 +322,7 @@ paths:
             type: string
             enum:
               - metrics
-          example: type=metrics
+          example: metrics
           description: Returns list of available  metrics by retailer
         - in: query
           name: retailer
@@ -342,7 +331,10 @@ paths:
             type: string
           example: sainsburys
           description: Define retailer to return list of available metrics
-      description: Returns a list of retailers that the user has access to
+      description: >-
+        This endpoint returns a list of the available metrics that can be pulled
+        from each data set. This can vary depending on the data connection due
+        to the granularity of data available for each retailer.
       operationId: get_retailers
       responses:
         '200':
@@ -437,13 +429,17 @@ paths:
             `metric=revenue,units,stock`
 
 
-            Please note that not all metrics are available depending on
+            **Note:** Not all metrics will be available depending on
             retailer/timeframe/type selections. 
           example: revenue
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
         - $ref: '#/components/parameters/sku'
-      description: ''
+      description: >-
+        Use the data by SKU endpoint to retrieve daily sales data by retailer
+        and grouped by SKU. This is best used when looking for top level sales
+        information, rather than requiring sales by store data - which is on a
+        weekly basis.
       operationId: ''
       responses:
         '200':
@@ -464,7 +460,11 @@ paths:
         - Data
   /data/type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     summary: Get available metrics
-    description: Return data by Store
+    description: >-
+      Use the data by Store endpoint to retrieve sales and other data points
+      grouped by SKU and store ID / name. This data set is updated on a weekly
+      basis. This data is often used when more granular data is required for
+      tasks like field team work.
     get:
       summary: Return data by Store
       parameters:
@@ -486,6 +486,7 @@ paths:
             type: string
             enum:
               - weekly
+              - monthly
           example: weekly
           description: |
             Return data by week
@@ -506,13 +507,17 @@ paths:
             `metric=revenue,units,stock`
 
 
-            Please note that not all metrics are available depending on
+            **Note:** Not all metrics will be available depending on
             retailer/timeframe/type selections.
           example: wastage
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
         - $ref: '#/components/parameters/sku'
-      description: ''
+      description: >-
+        Use the data by Store endpoint to retrieve sales and other data points
+        grouped by SKU and store ID / name. This data set is updated on a weekly
+        basis. This data is often used when more granular data is required for
+        tasks like field team work.
       operationId: ''
       responses:
         '200':
@@ -531,3 +536,46 @@ paths:
                 $ref: '#/components/schemas/errorServer'
       tags:
         - Data
+  /actions:
+    summary: Get all actions
+    description: >-
+      This data set returns a list of all active actions, insights and alerts as
+      set out in your elm account along with accompanying information by
+      retailer for a given week. This data set is often used as the first step
+      in a successful field visit, for example, as it outlines problem stores.
+
+
+      Note: Actions are refreshed weekly and so please plan your API requests
+      accordingly. We’d recommend pulling through actions on a Tuesday.
+    get:
+      summary: Get all actions by retailer
+      description: >-
+        This data set returns a list of all active actions, insights and alerts
+        as set out in your elm account along with accompanying information by
+        retailer for a given week. This data set is often used as the first step
+        in a successful field visit, for example, as it outlines problem stores.
+
+
+        **Note:** Actions are refreshed weekly and so please plan your API
+        requests accordingly. We’d recommend pulling through actions on a
+        Tuesday.
+      parameters:
+        - $ref: '#/components/parameters/retailer'
+      operationId: get_actions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/action'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
+      tags:
+        - Actions
