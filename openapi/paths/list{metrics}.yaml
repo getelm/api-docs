@@ -1,5 +1,6 @@
 summary: Get available metrics
-description: Returns a list of metrics by retailer that the user has access to
+description: >-
+    This endpoint returns a list of the available metrics that can be pulled from each data set. This can vary depending on the data connection due to the granularity of data available for each retailer.
 get:
   summary: Get available metrics
   parameters:
@@ -10,7 +11,7 @@ get:
         type: string
         enum:
           - metrics
-      example: type=metrics
+      example: metrics
       description: Returns list of available  metrics by retailer
     - in: query
       name: retailer
@@ -19,7 +20,8 @@ get:
         type: string
       example: sainsburys
       description: Define retailer to return list of available metrics
-  description: Returns a list of retailers that the user has access to
+  description: >-
+    This endpoint returns a list of the available metrics that can be pulled from each data set. This can vary depending on the data connection due to the granularity of data available for each retailer.
   operationId: get_retailers
   responses:
     '200':

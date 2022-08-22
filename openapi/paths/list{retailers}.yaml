@@ -1,5 +1,6 @@
 summary: Get available retailers
-description: Returns a list of retailers that the user has access to
+description: >-
+    This data set returns a list of the retailer connections that a user has access to in their elm account. To add further retailers/customers please visit the “Manage Connections” section of your elm dashboard.
 get:
   summary: Get available retailers
   parameters:
@@ -10,9 +11,10 @@ get:
         type: string
         enum:
           - retailers
-      example: type=retailers
+      example: retailers
       description: Returns list of available retailers or available metrics (by retailer)
-  description: Returns a list of retailers that the user has access to
+  description: >-
+    This data set returns a list of the retailer connections that a user has access to in their elm account. To add further retailers/customers please visit the “Manage Connections” section of your elm dashboard.
   operationId: get_retailers
   responses:
     '200':
