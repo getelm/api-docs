@@ -12,4 +12,4 @@ description: >
   Return data by week or day.
 
 
-  Note: Not all combinations of retailers and metrics will have access to daily data.
+  **Note:** Not all combinations of retailers and metrics will have access to daily data.
