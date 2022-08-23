@@ -1,6 +1,6 @@
 openapi: 3.0.1
 servers: 
-  - url: https://api.getelm.co
+  - url: https://api.getelm.co/api
     description: Live API server
 
 info:
