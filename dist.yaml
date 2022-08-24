@@ -262,7 +262,7 @@ paths:
   /list?type=retailers:
     summary: Get available retailers
     description: >-
-      This data set returns a list of the retailer connections that a user has
+      This endpoint returns a list of the retailer connections that a user has
       access to in their elm account. To add further retailers/customers please
       visit the “Manage Connections” section of your elm dashboard.
     get:
@@ -280,7 +280,7 @@ paths:
             Returns list of available retailers or available metrics (by
             retailer)
       description: >-
-        This data set returns a list of the retailer connections that a user has
+        This endpoint returns a list of the retailer connections that a user has
         access to in their elm account. To add further retailers/customers
         please visit the “Manage Connections” section of your elm dashboard.
       operationId: get_retailers
@@ -539,7 +539,7 @@ paths:
   /actions:
     summary: Get all actions
     description: >-
-      This data set returns a list of all active actions, insights and alerts as
+      This endpoint returns a list of all active actions, insights and alerts as
       set out in your elm account along with accompanying information by
       retailer for a given week. This data set is often used as the first step
       in a successful field visit, for example, as it outlines problem stores.
@@ -550,7 +550,7 @@ paths:
     get:
       summary: Get all actions by retailer
       description: >-
-        This data set returns a list of all active actions, insights and alerts
+        This endpoint returns a list of all active actions, insights and alerts
         as set out in your elm account along with accompanying information by
         retailer for a given week. This data set is often used as the first step
         in a successful field visit, for example, as it outlines problem stores.

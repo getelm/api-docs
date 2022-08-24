@@ -1,6 +1,6 @@
 summary: Get all actions
 description: >-
-  This data set returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
+  This endpoint returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
   
   
   Note: Actions are refreshed weekly and so please plan your API requests accordingly. We’d recommend pulling through actions on a Tuesday.
@@ -8,7 +8,7 @@ description: >-
 get:
   summary: Get all actions by retailer
   description: >-
-    This data set returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
+    This endpoint returns a list of all active actions, insights and alerts as set out in your elm account along with accompanying information by retailer for a given week. This data set is often used as the first step in a successful field visit, for example, as it outlines problem stores.
   
   
     **Note:** Actions are refreshed weekly and so please plan your API requests accordingly. We’d recommend pulling through actions on a Tuesday.
