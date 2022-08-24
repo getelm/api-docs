@@ -31,7 +31,6 @@ get:
           - ranged_stores
           - stores_selling
           - stores_with_stock
-          - scanning_ros
       description: >
         Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma. E.g. `metric=revenue,units,stock`
         
