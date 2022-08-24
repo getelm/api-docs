@@ -418,7 +418,7 @@ paths:
               - lost_sales
               - availability
               - unit_ros
-              - revenue_ros
+              - value_ros
               - ranged_stores
               - stores_selling
               - stores_with_stock
