@@ -68,7 +68,7 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: authorization
+      name: Authorization
   schemas:
     errorServer:
       type: object
@@ -276,9 +276,7 @@ paths:
             enum:
               - retailers
           example: retailers
-          description: >-
-            Returns list of available retailers or available metrics (by
-            retailer)
+          description: Returns list of available retailers
       description: >-
         This endpoint returns a list of the retailer connections that a user has
         access to in their elm account. To add further retailers/customers
@@ -388,7 +386,7 @@ paths:
                 $ref: '#/components/schemas/errorServer'
       tags:
         - List
-  /data/type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+  /data?type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     summary: Get available metrics
     description: Return data by SKU
     get:
@@ -457,7 +455,7 @@ paths:
                 $ref: '#/components/schemas/errorServer'
       tags:
         - Data
-  /data/type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+  /data?type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     summary: Get available metrics
     description: >-
       Use the data by Store endpoint to retrieve sales and other data points
@@ -535,7 +533,7 @@ paths:
                 $ref: '#/components/schemas/errorServer'
       tags:
         - Data
-  /actions:
+  /actions?retailer={retailer}:
     summary: Get all actions
     description: >-
       This endpoint returns a list of all active actions, insights and alerts as

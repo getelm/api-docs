@@ -65,7 +65,7 @@ components:
     ApiKeyAuth:
       type: apiKey
       in: header
-      name: authorization
+      name: Authorization
 security:
   - ApiKeyAuth: []
 paths:
@@ -75,9 +75,9 @@ paths:
     $ref: paths/list{retailers}.yaml
   /list?type=metrics&retailer={retailer}:
     $ref: paths/list{metrics}.yaml
-  /data/type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+  /data?type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     $ref: paths/data{sku}.yaml
-  /data/type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
+  /data?type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     $ref: paths/data{store}.yaml
-  /actions:
+  /actions?retailer={retailer}:
     $ref: paths/actions.yaml
