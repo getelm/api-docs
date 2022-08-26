@@ -42,7 +42,7 @@ get:
     - $ref: ../components/parameters/dateto.yaml
     - $ref: ../components/parameters/sku.yaml
   description: >-
-    Use the data by SKU endpoint to retrieve daily sales data by retailer and grouped by SKU. This is best used when looking for top level sales information, rather than requiring sales by store data - which is on a weekly basis.
+    Use the data by SKU endpoint to retrieve SKU level sales data by retailer for the selected timeframe. This is best used when looking for top level sales information, rather than requiring sales by store data - which is on a weekly basis.
   operationId: ''
   responses:
     '200':
