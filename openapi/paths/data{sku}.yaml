@@ -36,7 +36,7 @@ get:
         
 
         **Note:** Not all metrics will be
-        available depending on retailer/timeframe/type selections. 
+        available depending on retailer/timeframe/type selections. In addition, multiple metrics must be separated by a single comma. Spaces and other characters can prevent the data from returning correctly.
       example: revenue
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
