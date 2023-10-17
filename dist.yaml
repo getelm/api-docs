@@ -16,6 +16,39 @@ info:
     access to their key sales data. See more info below on how to fetch data
     from the elm API.
 
+    # Note on Data Freshness
+
+    We work hard to keep our data fresh and accurate.  Our system undergoes a
+    daily data synchronisation process with all retailer connections to ensure
+    that our dataset accurately reflects retroactive changes made by these
+    retailers. This synchronisation typically covers the previous 4-7 days,
+    depending on the specific data processing practices of each retailer.
+
+
+    Retailers often apply these backdated modifications to their data.  Daily
+    updates are required to ensure the most up-to-date and precise historical
+    data, which reflects what is available on the retailer's own platform.
+
+
+    In practical terms, this means that if you were to retrieve sales totals for
+    a Sunday on a Monday, the total for that Sunday may change when viewed on
+    subsequent days such as Tuesday, Wednesday, or Thursday.
+
+
+    To accommodate these retailer-driven data changes effectively, we recommend
+    including a request for data that spans approximately the last seven days in
+    every API call. By doing so, you can ensure access to the most current
+    information. When adding this data to your database, you can:
+
+    1. Keep all versions but use the most recent data.
+
+    2. Clear the previous day's data before adding new results.
+
+
+    This ensures 100% accuracy when handling retroactive changes, avoiding
+    potential discrepancies of up to around 1% in historical sales totals if
+    these practices are not followed.
+
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
