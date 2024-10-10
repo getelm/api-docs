@@ -1,0 +1,17 @@
+in: query
+name: viewby
+required: false
+schema:
+  type: string
+description: >
+  SKU code used to filter data down to a specific SKU or filter. Requires the filter parameter to be set to 'sku' or a specific filter. 
+  
+  
+  **Note:** Filter names are case sensitive.
+examples:
+  example1:
+    summary: 'with filter=sku'
+    value: '334'
+  example2:
+    summary: 'with filter=filter1'
+    value: 'Multi pack'

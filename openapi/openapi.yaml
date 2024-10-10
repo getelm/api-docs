@@ -100,6 +100,8 @@ paths:
     $ref: paths/list{retailers}.yaml
   /list?type=metrics&retailer={retailer}:
     $ref: paths/list{metrics}.yaml
+  /list?type=filters&retailer={retailer}:
+    $ref: paths/list{filters}.yaml
   /data?type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     $ref: paths/data{sku}.yaml
   /data?type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:

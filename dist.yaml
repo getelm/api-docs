@@ -214,9 +214,15 @@ components:
       required: true
       schema:
         type: string
-      description: >-
+      description: >
         Name of retailer to pull data from. Use `/list` to list available
         retailer options.
+
+
+        **Note:** retailer=all applies only to SKU level data. Using
+        retailer=all is equivalent to viewing the Sales Summary charts where
+        retailer=sainsburys is equivalent to viewing the charts in the
+        Sainsbury's dashboard.
       example: sainsburys
     timeframe:
       in: query
@@ -251,14 +257,73 @@ components:
         type: string
       description: Date on which to end pulling data in the format YYYY-MM-DD
       example: '2022-10-18'
-    sku:
+    comparison:
       in: query
-      name: sku
+      name: comparison
       required: false
       schema:
         type: string
-      description: SKU code used to filter data down to a specific SKU.
-      example: 55467
+        enum:
+          - period
+          - year
+      description: >
+        Returns an extra column for each metric selected with the value
+        percentage change between the current period/year and the previous
+        period/year.
+
+
+        **'Period'** refers to the value for the preceding timeframe. I.e. if
+        the current timeframe is 'week', the 'period' value will be the value
+        for the previous week.
+
+
+        **'Year'** refers to the value for the same timeframe in the previous
+        year. I.e. if the current timeframe is 'week', the 'year' value will be
+        the value for the same week in the previous year.
+      example: period
+    filter:
+      in: query
+      name: filter
+      required: false
+      schema:
+        type: string
+        default: sku
+        enum:
+          - sku
+          - filter1
+          - filter2
+          - filter3
+          - filter4
+          - filter5
+      description: >
+        Define whether the results should be filtered by SKU or product filters
+        (optional). This parameter is required if you would like to return data
+        for a specific SKU or filter. 
+
+
+        **Note:** When selecting filters, the filter names will be returned in
+        place of SKU codes. A list of available SKU codes and filter names can
+        be accessed through the /list path.
+      example: filter2
+    viewby:
+      in: query
+      name: viewby
+      required: false
+      schema:
+        type: string
+      description: >
+        SKU code used to filter data down to a specific SKU or filter. Requires
+        the filter parameter to be set to 'sku' or a specific filter. 
+
+
+        **Note:** Filter names are case sensitive.
+      examples:
+        example1:
+          summary: with filter=sku
+          value: '334'
+        example2:
+          summary: with filter=filter1
+          value: Multi pack
 security:
   - ApiKeyAuth: []
 paths:
@@ -419,6 +484,143 @@ paths:
                 $ref: '#/components/schemas/errorServer'
       tags:
         - List
+  /list?type=filters&retailer={retailer}:
+    summary: Get available SKU codes and filter names
+    description: >-
+      This endpoint returns a list of the SKU codes and filter names that can be
+      requested. To define filter names and to associate them with SKU codes
+      please visit the "Product Settings" section of your elm dashboard.
+    get:
+      summary: Get available SKU codes and filter names
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - filters
+          example: filters
+          description: Returns list of available  SKU codes and filter names by retailer
+        - in: query
+          name: retailer
+          required: true
+          schema:
+            type: string
+          example: sainsburys
+          description: >-
+            Define retailer to return list of available SKU codes and filter
+            names
+      description: >-
+        This endpoint returns a list of the SKU codes and filter names that can
+        be requested. To define filter names and to associate them with SKU
+        codes please visit the "Product Settings" section of your elm dashboard.
+      operationId: get_filters
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sku:
+                    type: array
+                    items:
+                      type: string
+                      example: '2'
+                    description: >-
+                      List of SKU codes. These are used in requesting data for a
+                      specific SKU.
+                    example:
+                      - '1'
+                      - '2'
+                      - '3'
+                      - '4'
+                  skuProductName:
+                    type: array
+                    items:
+                      type: string
+                      example: 2 - Product 2
+                    description: >-
+                      List of SKU codes and associated product names. Not used
+                      in API requests but useful for understanding the data and
+                      differentiating between SKU codes.
+                    example:
+                      - 1 - Product 1
+                      - 2 - Product 2
+                      - 3 - Product 3
+                      - 4 - Product 4
+                  filter1:
+                    type: array
+                    items:
+                      type: string
+                      example: IPA
+                    description: >-
+                      List of values associated with the first filter. These are
+                      used in requesting data for a specific filter.
+                    example:
+                      - IPA
+                      - Lager
+                      - Stout
+                      - Ale
+                  filter2:
+                    type: array
+                    items:
+                      type: string
+                      example: IPA
+                    description: >-
+                      List of values associated with the second filter. These
+                      are used in requesting data for a specific filter.
+                    example:
+                      - Multi-pack
+                      - Single
+                  filter3:
+                    type: array
+                    items:
+                      type: string
+                      example: IPA
+                    description: >-
+                      List of values associated with the third filter. These are
+                      used in requesting data for a specific filter.
+                    example:
+                      - Chocolate
+                      - Vanilla
+                      - Strawberry
+                      - Mint
+                  filter4:
+                    type: array
+                    items:
+                      type: string
+                      example: IPA
+                    description: >-
+                      List of values associated with the fourth filter. These
+                      are used in requesting data for a specific filter.
+                    example:
+                      - Snack
+                      - Meal
+                      - Dessert
+                      - Drink
+                  filter5:
+                    type: array
+                    items:
+                      type: string
+                      example: IPA
+                    description: >-
+                      List of values associated with the fifth filter. These are
+                      used in requesting data for a specific filter.
+                    example:
+                      - Low
+                      - Medium
+                      - High
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorServer'
+      tags:
+        - List
   /data?type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
     summary: Get available metrics
     description: Return data by SKU
@@ -466,7 +668,9 @@ paths:
           example: revenue
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
-        - $ref: '#/components/parameters/sku'
+        - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/viewby'
       description: >-
         Use the data by SKU endpoint to retrieve SKU level sales data by
         retailer for the selected timeframe. This is best used when looking for
@@ -546,7 +750,9 @@ paths:
           example: wastage
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
-        - $ref: '#/components/parameters/sku'
+        - $ref: '#/components/parameters/comparison'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/viewby'
       description: >-
         Use the data by Store endpoint to retrieve sales and other data points
         grouped by SKU and store ID / name. This data set is updated on a weekly

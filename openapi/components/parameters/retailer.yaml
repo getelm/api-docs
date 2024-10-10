@@ -3,5 +3,9 @@ name: retailer
 required: true
 schema:
   type: string
-description: Name of retailer to pull data from. Use `/list` to list available retailer options.
+description: >
+  Name of retailer to pull data from. Use `/list` to list available retailer options.
+
+
+  **Note:** retailer=all applies only to SKU level data. Using retailer=all is equivalent to viewing the Sales Summary charts where retailer=sainsburys is equivalent to viewing the charts in the Sainsbury's dashboard.
 example: sainsburys

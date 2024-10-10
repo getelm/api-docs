@@ -1,0 +1,17 @@
+in: query
+name: comparison
+required: false
+schema:
+  type: string
+  enum:
+    - period
+    - year
+description: >
+  Returns an extra column for each metric selected with the value percentage change between the current period/year and the previous period/year.
+
+
+  **'Period'** refers to the value for the preceding timeframe. I.e. if the current timeframe is 'week', the 'period' value will be the value for the previous week.
+
+
+  **'Year'** refers to the value for the same timeframe in the previous year. I.e. if the current timeframe is 'week', the 'year' value will be the value for the same week in the previous year.
+example: 'period'
