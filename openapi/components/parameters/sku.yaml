@@ -1,7 +1,0 @@
-in: query
-name: sku
-required: false
-schema:
-  type: string
-description: SKU code used to filter data down to a specific SKU.
-example: 55467

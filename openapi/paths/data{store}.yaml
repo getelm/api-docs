@@ -46,7 +46,8 @@ get:
       example: wastage
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
-    - $ref: ../components/parameters/sku.yaml 
+    - $ref: ../components/parameters/filter.yaml
+    - $ref: ../components/parameters/viewby.yaml 
   description:  >-
     Use the data by Store endpoint to retrieve sales and other data points grouped by SKU and store ID / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
   operationId: ''

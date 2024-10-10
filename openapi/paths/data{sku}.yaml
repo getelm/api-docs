@@ -40,7 +40,9 @@ get:
       example: revenue
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
-    - $ref: ../components/parameters/sku.yaml
+    - $ref: ../components/parameters/filter.yaml
+    - $ref: ../components/parameters/viewby.yaml
+
   description: >-
     Use the data by SKU endpoint to retrieve SKU level sales data by retailer for the selected timeframe. This is best used when looking for top level sales information, rather than requiring sales by store data - which is on a weekly basis.
   operationId: ''
