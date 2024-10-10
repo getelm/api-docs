@@ -40,6 +40,7 @@ get:
       example: revenue
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
+    - $ref: ../components/parameters/comparison.yaml
     - $ref: ../components/parameters/filter.yaml
     - $ref: ../components/parameters/viewby.yaml
 
