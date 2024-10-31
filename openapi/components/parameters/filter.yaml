@@ -3,7 +3,7 @@ name: filter
 required: false
 schema:
   type: string
-  default: 'sku'
+  default: "sku"
   enum:
     - sku
     - filter1
@@ -13,7 +13,7 @@ schema:
     - filter5
 description: >
   Define whether the results should be filtered by SKU or product filters (optional). This parameter is required if you would like to return data for a specific SKU or filter. 
-  
 
-  **Note:** When selecting filters, the filter names will be returned in place of SKU codes. A list of available SKU codes and filter names can be accessed through the /list path.
+
+  **Note:** When selecting filters, the filter names will be returned in place of SKU codes. A list of available SKU codes and filter names can be accessed through the `/list` path.
 example: filter2
