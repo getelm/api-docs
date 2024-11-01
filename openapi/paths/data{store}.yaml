@@ -39,19 +39,21 @@ get:
           - lost_sales
       description: >
         Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma. E.g. `metric=revenue,units,stock`
-        
+
 
         **Note:** Not all metrics will be
         available depending on retailer/timeframe/type selections. In addition, multiple metrics must be separated by a single comma. Spaces and other characters can prevent the data from returning correctly.
       example: wastage
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
-    - $ref: ../components/parameters/sku.yaml 
-  description:  >-
+    - $ref: ../components/parameters/comparison.yaml
+    - $ref: ../components/parameters/filter.yaml
+    - $ref: ../components/parameters/viewby.yaml
+  description: >-
     Use the data by Store endpoint to retrieve sales and other data points grouped by SKU and store ID / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
-  operationId: ''
+  operationId: data_store
   responses:
-    '200':
+    "200":
       description: OK
       content:
         application/json:
@@ -60,7 +62,7 @@ get:
             items:
               $ref: ../components/schemas/dataStore.yaml
     default:
-      description: 'Error'
+      description: "Error"
       content:
         application/json:
           schema:

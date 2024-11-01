@@ -1,0 +1,92 @@
+summary: Get available SKU codes and filter names
+description: >-
+    This endpoint returns a list of the SKU codes and filter names that can be requested. To define filter names and to associate them with SKU codes please visit the "Product Settings" section of your elm dashboard.
+get:
+  summary: Get available SKU codes and filter names
+  parameters:
+    - in: query
+      name: type
+      required: true
+      schema:
+        type: string
+        enum:
+          - filters
+      example: filters
+      description: Returns list of available  SKU codes and filter names by retailer
+    - in: query
+      name: retailer
+      required: true
+      schema:
+        type: string
+      example: sainsburys
+      description: Define retailer to return list of available SKU codes and filter names
+  description: >-
+    This endpoint returns a list of the SKU codes and filter names that can be requested. To define filter names and to associate them with SKU codes please visit the "Product Settings" section of your elm dashboard.
+  operationId: get_filters
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sku:
+                type: array
+                items: 
+                  type: string
+                  example: '2'
+                description: List of SKU codes. These are used in requesting data for a specific SKU.
+                example: ['1', '2', '3', '4']
+              skuProductName:
+                type: array
+                items: 
+                  type: string
+                  example: '2 - Product 2'
+                description: List of SKU codes and associated product names. Not used in API requests but useful for understanding the data and differentiating between SKU codes.
+                example: ['1 - Product 1','2 - Product 2','3 - Product 3','4 - Product 4',]
+              filter1:
+                type: array
+                items: 
+                  type: string
+                  example: 'IPA'
+                description: List of values associated with the first filter. These are used in requesting data for a specific filter.
+                example: ['IPA', 'Lager', 'Stout', 'Ale']
+              filter2:
+                type: array
+                items: 
+                  type: string
+                  example: 'IPA'
+                description: List of values associated with the second filter. These are used in requesting data for a specific filter.
+                example: ['Multi-pack', 'Single']
+              filter3:
+                type: array
+                items: 
+                  type: string
+                  example: 'IPA'
+                description: List of values associated with the third filter. These are used in requesting data for a specific filter.
+                example: ['Chocolate', 'Vanilla', 'Strawberry', 'Mint']
+              filter4:
+                type: array
+                items: 
+                  type: string
+                  example: 'IPA'
+                description: List of values associated with the fourth filter. These are used in requesting data for a specific filter.
+                example: ['Snack', 'Meal', 'Dessert', 'Drink']
+              filter5:
+                type: array
+                items: 
+                  type: string
+                  example: 'IPA'
+                description: List of values associated with the fifth filter. These are used in requesting data for a specific filter.
+                example: ['Low', 'Medium', 'High']
+              
+    default:
+      description: 'Error'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/errorServer.yaml
+  tags:
+    - List
+
