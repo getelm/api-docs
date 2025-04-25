@@ -21,6 +21,7 @@ get:
       schema:
         type: string
         enum:
+          - daily
           - weekly
           - monthly
       example: weekly
