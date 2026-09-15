@@ -49,6 +49,26 @@ info:
     potential discrepancies of up to around 1% in historical sales totals if
     these practices are not followed.
 
+    # Metric availability
+
+    Which metrics a retailer can serve depends on the retailer, the level and
+    the timeframe, and it changes over time.
+    `/list?type=metrics&retailer={retailer}` is the source of truth. It returns
+    four lists — `sku_metrics`, `store_metrics`, `sku_metrics_daily` and
+    `store_metrics_daily` — where `null` means nothing is available for that
+    combination.
+
+
+    Requests are lenient. A metric the retailer cannot serve is left out, the
+    rest is returned with a `200`, and the omitted names come back in the
+    **`X-Elm-Omitted-Metrics`** response header. An unrecognised metric name is
+    a `400`, as is a request where nothing can be served.
+
+
+    Two limits apply to every retailer. `unit_ros`, `value_ros`,
+    `ranged_stores`, `stores_selling` and `stores_with_stock` cannot be served
+    at a daily timeframe. Store level daily data is kept for 14 days only.
+
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
@@ -120,7 +140,9 @@ components:
       properties:
         week:
           type: string
-          description: Date string representing the week
+          description: >
+            The period. Named `date` when `timeframe=daily` and `month` when
+            `timeframe=monthly`.
         sku:
           type: string
           description: The product SKU
@@ -129,9 +151,14 @@ components:
           description: The product SKU and product name
         metric_name:
           type: string
-          description: >-
-            The selected metric. Additional metrics will appear as additional
-            properties
+          description: >
+            One property per requested metric, named after the metric.
+            Exceptions: `unit_ros` and `value_ros` return as `average_unit_ros`
+            and `stocking_point_unit_ros`, and some retailers report the average
+            only. With `comparison` set, each metric gains a percentage change
+            property suffixed `_ly_perc_change` or
+            `_previous_period_perc_change`. Metrics that could not be served are
+            absent and listed in the `X-Elm-Omitted-Metrics` header.
       example:
         week: '2022-06-12T23:00:00.000Z'
         sku: 446677
@@ -142,7 +169,9 @@ components:
       properties:
         week:
           type: string
-          description: Date string representing the week
+          description: >
+            The period. Named `date` when `timeframe=daily` and `month` when
+            `timeframe=monthly`.
         store_id:
           type: string
           description: The store ID
@@ -152,20 +181,23 @@ components:
         sku:
           type: string
           description: The product SKU
-        sku_product_name:
+        product_name:
           type: string
-          description: The product SKU and product name
+          description: The product name
         metric_name:
           type: string
-          description: >-
-            The selected metric. Additional metrics will appear as additional
-            properties
+          description: >
+            One property per requested metric, named after the metric. With
+            `comparison` set, each metric gains a percentage change property
+            suffixed `_ly_perc_change` or `_previous_period_perc_change`.
+            Metrics that could not be served are absent and listed in the
+            `X-Elm-Omitted-Metrics` header.
       example:
         week: '2022-06-12T23:00:00.000Z'
         store_id: 4
         store_name: 4 London
         sku: 446677
-        sku_product_name: 446677 productName
+        product_name: productName
         revenue: 44
     action:
       type: object
@@ -207,6 +239,51 @@ components:
         store_description: 3322 London
         action: no_sales
         action_description: No sales recorded for this SKU in 4 weeks
+  responses:
+    ServerError:
+      description: Unexpected server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorServer'
+    Unauthorized:
+      description: >
+        The API key is missing, not valid, or does not have access to the
+        requested data. Sales data and actions are granted separately.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorServer'
+          example:
+            success: false
+            error: Invalid credentials
+    Forbidden:
+      description: The API subscription on the account is not active.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorServer'
+          example:
+            success: false
+            error: >-
+              Active API subscription not found. Please check your payment
+              method or API settings
+    BadRequest:
+      description: >
+        Bad request. The `error` property gives the cause. Common ones: a
+        required parameter is missing; a metric name is not recognised; none of
+        the requested metrics are available for that retailer, level and
+        timeframe; the retailer has no data at that level and timeframe; a store
+        level daily request asks for dates over 14 days old.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorServer'
+          example:
+            success: false
+            error: >-
+              Invalid metric in request: revenu. Available metrics for tesco at
+              sku level weekly: revenue,units,availability,wastage,average_price
   parameters:
     retailer:
       in: query
@@ -223,6 +300,10 @@ components:
         retailer=all is equivalent to viewing the Sales Summary charts where
         retailer=sainsburys is equivalent to viewing the charts in the
         Sainsbury's dashboard.
+
+
+        retailer=all supports `revenue` and `units` only, and the `/list` paths
+        reject it.
       example: sainsburys
     timeframe:
       in: query
@@ -234,13 +315,14 @@ components:
           - daily
           - weekly
           - monthly
-      example: daily
+      example: weekly
       description: >
-        Return data by week or day.
+        Return data by day, week or month.
 
 
-        **Note:** Not all combinations of retailers and metrics will have access
-        to daily data.
+        **Note:** fewer metrics are available daily than weekly, and some
+        retailers have no daily data at all. Check `sku_metrics_daily` and
+        `store_metrics_daily` in `/list?type=metrics&retailer={retailer}`.
     datefrom:
       in: query
       name: datefrom
@@ -303,7 +385,7 @@ components:
 
         **Note:** When selecting filters, the filter names will be returned in
         place of SKU codes. A list of available SKU codes and filter names can
-        be accessed through the /list path.
+        be accessed through the `/list` path.
       example: filter2
     viewby:
       in: query
@@ -312,8 +394,9 @@ components:
       schema:
         type: string
       description: >
-        SKU code used to filter data down to a specific SKU or filter. Requires
-        the filter parameter to be set to 'sku' or a specific filter. 
+        SKU code of filter name can be used to filter data down to a specific
+        SKU or filter. Requires the filter parameter to be set to 'sku' or a
+        specific filter. 
 
 
         **Note:** Filter names are case sensitive.
@@ -324,6 +407,14 @@ components:
         example2:
           summary: with filter=filter1
           value: Multi pack
+  headers:
+    OmittedMetrics:
+      description: >
+        Requested metrics that were not returned, separated by commas. Present
+        only when something was left out.
+      schema:
+        type: string
+      example: unit_ros,stores_selling
 security:
   - ApiKeyAuth: []
 paths:
@@ -351,12 +442,12 @@ paths:
                     description: A boolean indicating that the query was successful
                 example:
                   success: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
   /list?type=retailers:
     summary: Get available retailers
     description: >-
@@ -379,6 +470,10 @@ paths:
         This endpoint returns a list of the retailer connections that a user has
         access to in their elm account. To add further retailers/customers
         please visit the “Manage Connections” section of your elm dashboard.
+
+
+        **Note:** the list includes `all`, which aggregates across retailers.
+        `all` works only on `/data?type=sku` — the `/list` paths reject it.
       operationId: get_retailers
       responses:
         '200':
@@ -390,26 +485,38 @@ paths:
                 items:
                   type: string
                 example:
+                  - all
                   - amazon
                   - sainsburys
-                  - tesco
                   - shopify
+                  - tesco
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - List
   /list?type=metrics&retailer={retailer}:
     summary: Get available metrics
     description: >-
-      This endpoint returns a list of the available metrics that can be pulled
-      from each data set. This can vary depending on the data connection due to
-      the granularity of data available for each retailer.
+      Returns the metrics that can be requested for a retailer, split by level
+      and timeframe. This varies by retailer and changes over time, so read it
+      here rather than hardcoding a list.
     get:
       summary: Get available metrics
+      description: >-
+        Returns the metrics that can be requested for a retailer, split by level
+        and timeframe. This varies by retailer and changes over time, so read it
+        here rather than hardcoding a list.
+
+
+        Each list covers one combination of level and timeframe. `null` means
+        nothing is available for that combination, and requesting it returns a
+        `400`. See "Metric availability" in the introduction.
       parameters:
         - in: query
           name: type
@@ -419,7 +526,7 @@ paths:
             enum:
               - metrics
           example: metrics
-          description: Returns list of available  metrics by retailer
+          description: Returns list of available metrics by retailer
         - in: query
           name: retailer
           required: true
@@ -427,61 +534,77 @@ paths:
             type: string
           example: sainsburys
           description: Define retailer to return list of available metrics
-      description: >-
-        This endpoint returns a list of the available metrics that can be pulled
-        from each data set. This can vary depending on the data connection due
-        to the granularity of data available for each retailer.
-      operationId: get_retailers
+      operationId: get_metrics
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  retailer:
-                    type: string
-                    description: The selected retailer
-                    example: waitrose
-                  sku_metrics:
-                    type: array
-                    items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    retailer:
                       type: string
-                      example: revenue
-                    description: Available metrics when returning data by SKU
-                  store_metrics:
-                    type: array
-                    items:
-                      type: string
-                      example: units
-                    description: Available metrics when returning data by store
-                example:
-                  retailer: tesco
+                      description: The selected retailer
+                    sku_metrics:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                      description: Available for `type=sku`, weekly or monthly.
+                    store_metrics:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                      description: Available for `type=store`, weekly or monthly.
+                    sku_metrics_daily:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                      description: Available for `type=sku`, daily.
+                    store_metrics_daily:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                      description: Available for `type=store`, daily.
+              example:
+                - retailer: retailer_a
                   sku_metrics:
                     - revenue
                     - units
-                    - availability
+                    - average_price
                     - wastage
-                    - unit_ros
-                    - value_ros
-                    - ranged_stores
-                    - stores_selling
-                    - stores_with_stock
                   store_metrics:
                     - revenue
                     - units
-                    - wastage
-                    - lost_sales
-                    - unit_ros
-                    - value_ros
+                    - average_price
                     - stock
+                  sku_metrics_daily:
+                    - revenue
+                    - units
+                    - average_price
+                  store_metrics_daily: null
+                - retailer: retailer_b
+                  sku_metrics:
+                    - revenue
+                    - units
+                    - average_price
+                  store_metrics: null
+                  sku_metrics_daily: null
+                  store_metrics_daily: null
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - List
   /list?type=filters&retailer={retailer}:
@@ -613,19 +736,25 @@ paths:
                       - Low
                       - Medium
                       - High
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - List
   /data?type=sku&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
-    summary: Get available metrics
+    summary: Return data by SKU
     description: Return data by SKU
     get:
       summary: Return data by SKU
+      description: >-
+        Retrieve SKU level sales data by retailer for the selected timeframe.
+        This is best used when looking for top level sales information, rather
+        than requiring sales by store data.
       parameters:
         - in: query
           name: type
@@ -635,7 +764,7 @@ paths:
             enum:
               - sku
           example: sku
-          description: Return data at a SKU or store level
+          description: Return data at SKU level
         - $ref: '#/components/parameters/retailer'
         - $ref: '#/components/parameters/timeframe'
         - in: query
@@ -644,65 +773,73 @@ paths:
           schema:
             type: string
             enum:
-              - units
               - revenue
-              - wastage
-              - stock
-              - lost_sales
+              - units
+              - average_price
               - availability
+              - wastage
               - unit_ros
               - value_ros
               - ranged_stores
               - stores_selling
               - stores_with_stock
           description: >
-            Which metric(s) should be returned. Multiple metrics can be returned
-            in one request when separated by a comma. E.g.
-            `metric=revenue,units,stock`
+            Which metric(s) to return, separated by a single comma. E.g.
+            `metric=revenue,units,wastage`
 
 
-            **Note:** Not all metrics will be available depending on
-            retailer/timeframe/type selections. In addition, multiple metrics
-            must be separated by a single comma. Spaces and other characters can
-            prevent the data from returning correctly.
+            The list above is everything this endpoint can build. What a given
+            retailer serves depends on the retailer and timeframe, so check
+            `/list?type=metrics&retailer={retailer}`. An unavailable metric is
+            left out and named in the `X-Elm-Omitted-Metrics` response header.
+
+
+            `unit_ros` and `value_ros` return as `average_unit_ros` and
+            `stocking_point_unit_ros`. Those two, plus `ranged_stores`,
+            `stores_selling` and `stores_with_stock`, cannot be served daily.
           example: revenue
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
         - $ref: '#/components/parameters/comparison'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/viewby'
-      description: >-
-        Use the data by SKU endpoint to retrieve SKU level sales data by
-        retailer for the selected timeframe. This is best used when looking for
-        top level sales information, rather than requiring sales by store data -
-        which is on a weekly basis.
-      operationId: ''
+      operationId: data_sku
       responses:
         '200':
           description: OK
+          headers:
+            X-Elm-Omitted-Metrics:
+              $ref: '#/components/headers/OmittedMetrics'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/dataSku'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - Data
   /data?type=store&retailer={retailer}&timeframe={timeframe}&metric={metric}&datefrom={datefrom}&dateto={dateto}:
-    summary: Get available metrics
+    summary: Return data by store
     description: >-
-      Use the data by Store endpoint to retrieve sales and other data points
-      grouped by SKU and store ID / name. This data set is updated on a weekly
-      basis. This data is often used when more granular data is required for
-      tasks like field team work.
+      Retrieve sales and other data points grouped by SKU and store ID / name.
+      Often used where more granular data is needed, such as field team work.
     get:
       summary: Return data by Store
+      description: >-
+        Retrieve sales and other data points grouped by SKU and store ID / name.
+        Often used where more granular data is needed, such as field team work.
+
+
+        **Note:** store level daily data is kept for 14 days only. Older daily
+        dates return a `400`. Weekly and monthly are not limited.
       parameters:
         - in: query
           name: type
@@ -710,10 +847,9 @@ paths:
           schema:
             type: string
             enum:
-              - sku
               - store
-          example: sku
-          description: Return data at a SKU or store level
+          example: store
+          description: Return data at store level
         - $ref: '#/components/parameters/retailer'
         - in: query
           name: timeframe
@@ -725,56 +861,61 @@ paths:
               - weekly
               - monthly
           example: weekly
-          description: |
-            Return data by week
+          description: >
+            Return data by day, week or month.
+
+
+            **Note:** far fewer retailers report store level data daily than
+            weekly. Check `store_metrics_daily` in
+            `/list?type=metrics&retailer={retailer}` first.
         - in: query
           name: metric
           required: true
           schema:
             type: string
             enum:
-              - units
               - revenue
-              - wastage
+              - units
+              - average_price
               - stock
+              - wastage
               - lost_sales
           description: >
-            Which metric(s) should be returned. Multiple metrics can be returned
-            in one request when separated by a comma. E.g.
+            Which metric(s) to return, separated by a single comma. E.g.
             `metric=revenue,units,stock`
 
 
-            **Note:** Not all metrics will be available depending on
-            retailer/timeframe/type selections. In addition, multiple metrics
-            must be separated by a single comma. Spaces and other characters can
-            prevent the data from returning correctly.
-          example: wastage
+            The list above is everything this endpoint can build. What a given
+            retailer serves depends on the retailer and timeframe, so check
+            `/list?type=metrics&retailer={retailer}`. An unavailable metric is
+            left out and named in the `X-Elm-Omitted-Metrics` response header.
+          example: revenue
         - $ref: '#/components/parameters/datefrom'
         - $ref: '#/components/parameters/dateto'
         - $ref: '#/components/parameters/comparison'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/viewby'
-      description: >-
-        Use the data by Store endpoint to retrieve sales and other data points
-        grouped by SKU and store ID / name. This data set is updated on a weekly
-        basis. This data is often used when more granular data is required for
-        tasks like field team work.
-      operationId: ''
+      operationId: data_store
       responses:
         '200':
           description: OK
+          headers:
+            X-Elm-Omitted-Metrics:
+              $ref: '#/components/headers/OmittedMetrics'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/dataStore'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - Data
   /actions?retailer={retailer}:
@@ -812,11 +953,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/action'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/errorServer'
+          $ref: '#/components/responses/ServerError'
       tags:
         - Actions
