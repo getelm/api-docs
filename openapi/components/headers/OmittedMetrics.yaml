@@ -1,0 +1,6 @@
+description: >
+  Requested metrics that were not returned, separated by commas. Present only when something was
+  left out.
+schema:
+  type: string
+example: unit_ros,stores_selling

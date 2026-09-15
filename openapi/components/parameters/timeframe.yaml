@@ -7,9 +7,10 @@ schema:
     - daily
     - weekly
     - monthly
-example: daily
+example: weekly
 description: >
-  Return data by week or day.
+  Return data by day, week or month.
 
 
-  **Note:** Not all combinations of retailers and metrics will have access to daily data.
+  **Note:** fewer metrics are available daily than weekly, and some retailers have no daily data at
+  all. Check `sku_metrics_daily` and `store_metrics_daily` in `/list?type=metrics&retailer={retailer}`.

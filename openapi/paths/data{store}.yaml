@@ -1,8 +1,12 @@
-summary: Get available metrics
-description: >-
-  Use the data by Store endpoint to retrieve sales and other data points grouped by SKU and store ID / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
+summary: Return data by store
+description: Retrieve sales and other data points grouped by SKU and store ID / name. Often used where more granular data is needed, such as field team work.
 get:
   summary: Return data by Store
+  description: >-
+    Retrieve sales and other data points grouped by SKU and store ID / name. Often used where more granular data is needed, such as field team work.
+
+
+    **Note:** store level daily data is kept for 14 days only. Older daily dates return a `400`. Weekly and monthly are not limited.
   parameters:
     - in: query
       name: type
@@ -10,10 +14,9 @@ get:
       schema:
         type: string
         enum:
-          - sku
           - store
-      example: sku
-      description: Return data at a SKU or store level
+      example: store
+      description: Return data at store level
     - $ref: ../components/parameters/retailer.yaml
     - in: query
       name: timeframe
@@ -26,47 +29,53 @@ get:
           - monthly
       example: weekly
       description: >
-        Return data by week
+        Return data by day, week or month.
+
+
+        **Note:** far fewer retailers report store level data daily than weekly. Check `store_metrics_daily` in `/list?type=metrics&retailer={retailer}` first.
     - in: query
       name: metric
       required: true
       schema:
         type: string
         enum:
-          - units
           - revenue
-          - wastage
+          - units
+          - average_price
           - stock
+          - wastage
           - lost_sales
       description: >
-        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma. E.g. `metric=revenue,units,stock`
+        Which metric(s) to return, separated by a single comma. E.g. `metric=revenue,units,stock`
 
 
-        **Note:** Not all metrics will be
-        available depending on retailer/timeframe/type selections. In addition, multiple metrics must be separated by a single comma. Spaces and other characters can prevent the data from returning correctly.
-      example: wastage
+        The list above is everything this endpoint can build. What a given retailer serves depends on the retailer and timeframe, so check `/list?type=metrics&retailer={retailer}`. An unavailable metric is left out and named in the `X-Elm-Omitted-Metrics` response header.
+      example: revenue
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
     - $ref: ../components/parameters/comparison.yaml
     - $ref: ../components/parameters/filter.yaml
     - $ref: ../components/parameters/viewby.yaml
-  description: >-
-    Use the data by Store endpoint to retrieve sales and other data points grouped by SKU and store ID / name. This data set is updated on a weekly basis. This data is often used when more granular data is required for tasks like field team work.
   operationId: data_store
   responses:
     "200":
       description: OK
+      headers:
+        X-Elm-Omitted-Metrics:
+          $ref: ../components/headers/OmittedMetrics.yaml
       content:
         application/json:
           schema:
             type: array
             items:
               $ref: ../components/schemas/dataStore.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
     default:
-      description: "Error"
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorServer.yaml
+      $ref: ../components/responses/ServerError.yaml
   tags:
     - Data

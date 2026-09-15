@@ -1,0 +1,8 @@
+description: The API subscription on the account is not active.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/errorServer.yaml
+    example:
+      success: false
+      error: Active API subscription not found. Please check your payment method or API settings

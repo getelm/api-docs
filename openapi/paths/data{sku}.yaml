@@ -1,7 +1,8 @@
-summary: Get available metrics
+summary: Return data by SKU
 description: Return data by SKU
 get:
   summary: Return data by SKU
+  description: Retrieve SKU level sales data by retailer for the selected timeframe. This is best used when looking for top level sales information, rather than requiring sales by store data.
   parameters:
     - in: query
       name: type
@@ -11,7 +12,7 @@ get:
         enum:
           - sku
       example: sku
-      description: Return data at a SKU or store level
+      description: Return data at SKU level
     - $ref: ../components/parameters/retailer.yaml
     - $ref: ../components/parameters/timeframe.yaml
     - in: query
@@ -20,47 +21,50 @@ get:
       schema:
         type: string
         enum:
-          - units
           - revenue
-          - wastage
-          - stock
-          - lost_sales
+          - units
+          - average_price
           - availability
+          - wastage
           - unit_ros
           - value_ros
           - ranged_stores
           - stores_selling
           - stores_with_stock
       description: >
-        Which metric(s) should be returned. Multiple metrics can be returned in one request when separated by a comma. E.g. `metric=revenue,units,stock`
+        Which metric(s) to return, separated by a single comma. E.g. `metric=revenue,units,wastage`
 
 
-        **Note:** Not all metrics will be
-        available depending on retailer/timeframe/type selections. In addition, multiple metrics must be separated by a single comma. Spaces and other characters can prevent the data from returning correctly.
+        The list above is everything this endpoint can build. What a given retailer serves depends on the retailer and timeframe, so check `/list?type=metrics&retailer={retailer}`. An unavailable metric is left out and named in the `X-Elm-Omitted-Metrics` response header.
+
+
+        `unit_ros` and `value_ros` return as `average_unit_ros` and `stocking_point_unit_ros`. Those two, plus `ranged_stores`, `stores_selling` and `stores_with_stock`, cannot be served daily.
       example: revenue
     - $ref: ../components/parameters/datefrom.yaml
     - $ref: ../components/parameters/dateto.yaml
     - $ref: ../components/parameters/comparison.yaml
     - $ref: ../components/parameters/filter.yaml
     - $ref: ../components/parameters/viewby.yaml
-
-  description: >-
-    Use the data by SKU endpoint to retrieve SKU level sales data by retailer for the selected timeframe. This is best used when looking for top level sales information, rather than requiring sales by store data - which is on a weekly basis.
   operationId: data_sku
   responses:
     "200":
       description: OK
+      headers:
+        X-Elm-Omitted-Metrics:
+          $ref: ../components/headers/OmittedMetrics.yaml
       content:
         application/json:
           schema:
             type: array
             items:
               $ref: ../components/schemas/dataSku.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
     default:
-      description: "Error"
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorServer.yaml
+      $ref: ../components/responses/ServerError.yaml
   tags:
     - Data

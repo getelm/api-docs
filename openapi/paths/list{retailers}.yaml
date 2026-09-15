@@ -15,6 +15,9 @@ get:
       description: Returns list of available retailers 
   description: >-
     This endpoint returns a list of the retailer connections that a user has access to in their elm account. To add further retailers/customers please visit the “Manage Connections” section of your elm dashboard.
+
+
+    **Note:** the list includes `all`, which aggregates across retailers. `all` works only on `/data?type=sku` — the `/list` paths reject it.
   operationId: get_retailers
   responses:
     '200':
@@ -25,13 +28,15 @@ get:
             type: array
             items:
               type: string
-            example: ['amazon', 'sainsburys', 'tesco', 'shopify']
+            example: ['all', 'amazon', 'sainsburys', 'shopify', 'tesco']
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
     default:
-      description: 'Error'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorServer.yaml
+      $ref: ../components/responses/ServerError.yaml
   tags:
     - List
 

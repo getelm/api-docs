@@ -8,4 +8,7 @@ description: >
 
 
   **Note:** retailer=all applies only to SKU level data. Using retailer=all is equivalent to viewing the Sales Summary charts where retailer=sainsburys is equivalent to viewing the charts in the Sainsbury's dashboard.
+
+
+  retailer=all supports `revenue` and `units` only, and the `/list` paths reject it.
 example: sainsburys

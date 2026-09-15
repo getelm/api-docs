@@ -1,0 +1,12 @@
+description: >
+  Bad request. The `error` property gives the cause. Common ones: a required parameter is missing;
+  a metric name is not recognised; none of the requested metrics are available for that retailer,
+  level and timeframe; the retailer has no data at that level and timeframe; a store level daily
+  request asks for dates over 14 days old.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/errorServer.yaml
+    example:
+      success: false
+      error: "Invalid metric in request: revenu. Available metrics for tesco at sku level weekly: revenue,units,availability,wastage,average_price"

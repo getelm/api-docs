@@ -2,7 +2,8 @@ type: object
 properties:
   week:
     type: string
-    description: Date string representing the week
+    description: >
+      The period. Named `date` when `timeframe=daily` and `month` when `timeframe=monthly`.
   sku:
     type: string
     description: The product SKU
@@ -11,7 +12,12 @@ properties:
     description: The product SKU and product name
   metric_name:
     type: string
-    description: The selected metric. Additional metrics will appear as additional properties
+    description: >
+      One property per requested metric, named after the metric. Exceptions: `unit_ros` and
+      `value_ros` return as `average_unit_ros` and `stocking_point_unit_ros`, and some retailers
+      report the average only. With `comparison` set, each metric gains a percentage change
+      property suffixed `_ly_perc_change` or `_previous_period_perc_change`. Metrics that could not
+      be served are absent and listed in the `X-Elm-Omitted-Metrics` header.
 example:
   week: 2022-06-12T23:00:00.000Z
   sku: 446677

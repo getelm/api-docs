@@ -21,9 +21,9 @@ get:
                 description: A boolean indicating that the query was successful
             example:
               success: true
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
     default:
-      description: 'Error'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorServer.yaml
+      $ref: ../components/responses/ServerError.yaml

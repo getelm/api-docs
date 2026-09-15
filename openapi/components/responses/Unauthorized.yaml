@@ -1,0 +1,10 @@
+description: >
+  The API key is missing, not valid, or does not have access to the requested data. Sales data and
+  actions are granted separately.
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/errorServer.yaml
+    example:
+      success: false
+      error: Invalid credentials

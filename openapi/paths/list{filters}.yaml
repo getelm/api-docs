@@ -81,12 +81,14 @@ get:
                 description: List of values associated with the fifth filter. These are used in requesting data for a specific filter.
                 example: ['Low', 'Medium', 'High']
               
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "403":
+      $ref: ../components/responses/Forbidden.yaml
     default:
-      description: 'Error'
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/errorServer.yaml
+      $ref: ../components/responses/ServerError.yaml
   tags:
     - List
 

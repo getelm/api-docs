@@ -40,6 +40,23 @@ info:
 
     This ensures 100% accuracy when handling retroactive changes, avoiding potential discrepancies of up to around 1% in historical sales totals if these practices are not followed.
 
+    # Metric availability
+
+    Which metrics a retailer can serve depends on the retailer, the level and the timeframe, and it
+    changes over time. `/list?type=metrics&retailer={retailer}` is the source of truth. It returns
+    four lists — `sku_metrics`, `store_metrics`, `sku_metrics_daily` and `store_metrics_daily` —
+    where `null` means nothing is available for that combination.
+
+
+    Requests are lenient. A metric the retailer cannot serve is left out, the rest is returned with
+    a `200`, and the omitted names come back in the **`X-Elm-Omitted-Metrics`** response header. An
+    unrecognised metric name is a `400`, as is a request where nothing can be served.
+
+
+    Two limits apply to every retailer. `unit_ros`, `value_ros`, `ranged_stores`, `stores_selling`
+    and `stores_with_stock` cannot be served at a daily timeframe. Store level daily data is kept
+    for 14 days only.
+
     # API Keys
 
     This API relies on an API key for authentication. To generate/access your
