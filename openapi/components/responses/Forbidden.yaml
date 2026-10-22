@@ -1,8 +1,16 @@
-description: The API subscription on the account is not active.
+description: The API subscription on the account is not active, or the account is no longer active.
 content:
   application/json:
     schema:
       $ref: ../schemas/errorServer.yaml
-    example:
-      success: false
-      error: Active API subscription not found. Please check your payment method or API settings
+    examples:
+      subscriptionInactive:
+        summary: API subscription not active
+        value:
+          success: false
+          error: Active API subscription not found. Please check your payment method or API settings
+      accountInactive:
+        summary: Account no longer active
+        value:
+          success: false
+          error: This account is no longer active. Please contact us at hello@getelm.co

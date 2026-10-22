@@ -659,14 +659,22 @@ components:
             success: false
             error: Invalid credentials
     Forbidden:
-      description: The API subscription on the account is not active.
+      description: The API subscription on the account is not active, or the account is no longer active.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/errorServer'
-          example:
-            success: false
-            error: Active API subscription not found. Please check your payment method or API settings
+          examples:
+            subscriptionInactive:
+              summary: API subscription not active
+              value:
+                success: false
+                error: Active API subscription not found. Please check your payment method or API settings
+            accountInactive:
+              summary: Account no longer active
+              value:
+                success: false
+                error: This account is no longer active. Please contact us at hello@getelm.co
     BadRequest:
       description: |
         Bad request. The `error` property gives the cause. Common ones: a required parameter is missing; a metric name is not recognised; none of the requested metrics are available for that retailer, level and timeframe; the retailer has no data at that level and timeframe; the timeframe is not supported for the retailer; `filter` or `viewby` is sent for `ocado_foundation`; a store level daily request asks for dates over 14 days old.
