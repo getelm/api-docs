@@ -14,3 +14,7 @@ description: >
 
   **Note:** fewer metrics are available daily than weekly, and some retailers have no daily data at
   all. Check `sku_metrics_daily` and `store_metrics_daily` in `/list?type=metrics&retailer={retailer}`.
+
+
+  Some retailers serve weekly data only, for example `ocado_foundation`. A timeframe that the retailer
+  cannot serve returns a `400` that lists the supported timeframes.

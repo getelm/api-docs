@@ -16,4 +16,7 @@ description: >
 
 
   **Note:** When selecting filters, the filter names will be returned in place of SKU codes. A list of available SKU codes and filter names can be accessed through the `/list` path.
+
+
+  Not available for retailer=ocado_foundation. A request with this parameter returns a `400`.
 example: filter2

@@ -44,13 +44,13 @@ get:
                   nullable: true
                   items:
                     type: string
-                  description: Available for `type=sku`, weekly or monthly.
+                  description: Available for `type=sku`, weekly, and monthly where the retailer supports it.
                 store_metrics:
                   type: array
                   nullable: true
                   items:
                     type: string
-                  description: Available for `type=store`, weekly or monthly.
+                  description: Available for `type=store`, weekly, and monthly where the retailer supports it.
                 sku_metrics_daily:
                   type: array
                   nullable: true

@@ -2,15 +2,15 @@
 apis:
   main@v1:
     root: openapi/openapi.yaml
-lint:
-  extends:
-    - recommended
-  rules:
-    no-unused-components: warning
-    # The path keys carry query strings on purpose, so the operations read as real URLs in the
-    # sidebar. That makes the linter treat {retailer} and friends as undeclared path parameters.
-    path-not-include-query: off
-    path-parameters-defined: off
+extends:
+  - recommended
+rules:
+  no-unused-components: warning
+  # The path keys carry query strings on purpose, so the operations read as real URLs in the
+  # sidebar. That makes the linter treat {retailer} and friends as undeclared path parameters.
+  path-not-include-query: off
+  path-parameters-defined: off
+# Deprecated in @redocly/cli, but redoc-cli build reads the template and theme only from here
 features.openapi:
   htmlTemplate: ./docs/index.html
   theme:

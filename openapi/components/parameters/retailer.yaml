@@ -11,4 +11,7 @@ description: >
 
 
   retailer=all supports `revenue` and `units` only, and the `/list` paths reject it.
+
+
+  **Note:** retailer=ocado_foundation is for Ocado Foundation accounts. It returns one total per week for the whole account, with `sku` and `sku_product_name` as `null`. It supports `type=sku`, `timeframe=weekly` and the metrics `revenue`, `units` and `average_price` only. `filter` and `viewby` return a `400`. Use retailer=ocado for SKU level Ocado data, where your account has it.
 example: sainsburys

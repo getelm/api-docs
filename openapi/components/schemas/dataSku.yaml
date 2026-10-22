@@ -6,10 +6,12 @@ properties:
       The period. Named `date` when `timeframe=daily` and `month` when `timeframe=monthly`.
   sku:
     type: string
-    description: The product SKU
+    nullable: true
+    description: The product SKU. `null` for retailers that report totals only, for example `ocado_foundation`.
   sku_product_name:
     type: string
-    description: The product SKU and product name
+    nullable: true
+    description: The product SKU and product name. `null` for retailers that report totals only, for example `ocado_foundation`.
   metric_name:
     type: string
     description: >

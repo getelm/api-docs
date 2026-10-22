@@ -22,6 +22,9 @@ get:
       description: Define retailer to return list of available SKU codes and filter names
   description: >-
     This endpoint returns a list of the SKU codes and filter names that can be requested. To define filter names and to associate them with SKU codes please visit the "Product Settings" section of your elm dashboard.
+
+
+    **Note:** a retailer without SKU or product data, for example `ocado_foundation`, returns empty lists.
   operationId: get_filters
   responses:
     '200':

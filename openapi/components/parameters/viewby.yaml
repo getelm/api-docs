@@ -8,6 +8,9 @@ description: >
 
 
   **Note:** Filter names are case sensitive.
+
+
+  Not available for retailer=ocado_foundation. A request with this parameter returns a `400`.
 examples:
   example1:
     summary: "with filter=sku"
