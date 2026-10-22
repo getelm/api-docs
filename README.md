@@ -43,7 +43,7 @@ Validates the definition.
 ### Spec vs Formatted Docs
 
 - This repo uses [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) to split the spec into multiple files for ease of development over time.
-- `redoc-cli` is then used to build a static html file that is served online.
+- `openapi build-docs` (from `@redocly/cli`) is then used to build a static html file that is served online.
 
 After updating documentation, be sure to run `npm run build` to build the updated openAPI spec and accompanying static html file.
 

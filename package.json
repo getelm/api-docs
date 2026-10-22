@@ -2,13 +2,12 @@
   "name": "elm-api",
   "version": "1.0.0",
   "dependencies": {
-    "@redocly/cli": "1.34.22",
-    "redoc-cli": "^0.13.18"
+    "@redocly/cli": "1.34.22"
   },
   "private": true,
   "scripts": {
     "start": "openapi preview-docs",
-    "build": "openapi bundle main@v1 -o dist.yaml && redoc-cli build dist.yaml -t docs/index.html && mv redoc-static.html index.html",
+    "build": "openapi bundle main@v1 -o dist.yaml && openapi build-docs dist.yaml -t docs/index.html -o index.html",
     "test": "openapi lint"
   }
 }

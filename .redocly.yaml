@@ -10,10 +10,10 @@ rules:
   # sidebar. That makes the linter treat {retailer} and friends as undeclared path parameters.
   path-not-include-query: off
   path-parameters-defined: off
-# Deprecated in @redocly/cli, but redoc-cli build reads the template and theme only from here
-features.openapi:
-  htmlTemplate: ./docs/index.html
-  theme:
-    colors:
-      primary:
-        main: "#05C6B3"
+theme:
+  openapi:
+    htmlTemplate: ./docs/index.html
+    theme:
+      colors:
+        primary:
+          main: "#05C6B3"
